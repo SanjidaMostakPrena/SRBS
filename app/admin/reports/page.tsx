@@ -463,35 +463,9 @@ const SalesReport: React.FC<SalesReportProps> = ({ data, totalSales, totalOrders
         </div>
       </div>
 
-      <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-white/50">
-        <h3 className="text-lg font-bold text-gray-700 mb-4">Revenue & Orders Trend</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-            <YAxis yAxisId="left" tick={{ fontSize: 12 }} />
-            <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12 }} />
-            <Tooltip />
-            <Legend />
-            <Bar yAxisId="left" dataKey="revenue" fill="#3b82f6" name="Revenue (৳)" />
-            <Bar yAxisId="right" dataKey="orders" fill="#10b981" name="Orders" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+    
 
-      <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-white/50">
-        <h3 className="text-lg font-bold text-gray-700 mb-4">Profit Trend</h3>
-        <ResponsiveContainer width="100%" height={250}>
-          <ReLineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-            <YAxis tick={{ fontSize: 12 }} />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="profit" stroke="#f59e0b" strokeWidth={2} name="Profit (৳)" />
-          </ReLineChart>
-        </ResponsiveContainer>
-      </div>
+    
 
       <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200/50 bg-gradient-to-r from-blue-50 to-indigo-50">
@@ -557,45 +531,7 @@ const CollectionReport: React.FC<CollectionReportProps> = ({ data, totalCollecte
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-white/50">
-          <h3 className="text-lg font-bold text-gray-700 mb-4">Collection & Due Trend</h3>
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="collected" fill="#10b981" name="Collected (৳)" />
-              <Bar dataKey="due" fill="#f59e0b" name="Due (৳)" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-white/50">
-          <h3 className="text-lg font-bold text-gray-700 mb-4">Collection Breakdown</h3>
-          <ResponsiveContainer width="100%" height={280}>
-            <RePieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </RePieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      
 
       <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200/50 bg-gradient-to-r from-green-50 to-emerald-50">
@@ -749,45 +685,7 @@ const StockReport: React.FC<StockReportProps> = ({ data, totalStock, lowStockIte
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-white/50">
-          <h3 className="text-lg font-bold text-gray-700 mb-4">Stock Distribution</h3>
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="product" tick={{ fontSize: 10 }} />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="warehouse" fill="#3b82f6" name="Warehouse" />
-              <Bar dataKey="dealer" fill="#8b5cf6" name="Dealer" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-white/50">
-          <h3 className="text-lg font-bold text-gray-700 mb-4">Stock by Location</h3>
-          <ResponsiveContainer width="100%" height={280}>
-            <RePieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </RePieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      
 
       <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200/50 bg-gradient-to-r from-purple-50 to-pink-50">

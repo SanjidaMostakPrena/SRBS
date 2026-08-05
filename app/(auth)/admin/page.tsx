@@ -1,12 +1,13 @@
-// app/(auth)/admin/page.tsx
+
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function AdminLoginPage() {
+// Separate component that uses useSearchParams
+function AdminLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -319,5 +320,65 @@ export default function AdminLoginPage() {
         />
       </div>
     </div>
+  );
+}
+
+// Loading fallback component
+function LoginFormFallback() {
+  return (
+    <div className="min-h-screen flex bg-white">
+      <div className="flex-1 flex items-center justify-center px-8 py-12 lg:px-16 xl:px-24">
+        <div className="w-full max-w-md">
+          <div className="mb-10">
+            <div className="flex items-center gap-3">
+              <div className="relative h-12 w-12 flex-shrink-0">
+                <Image
+                  src="/image/image.png"
+                  alt="SRBS Logo"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <div>
+                <span className="text-2xl font-extrabold text-gray-900">SRBS</span>
+                <span className="block text-xs text-gray-500 font-medium tracking-wider uppercase">
+                  Admin Panel
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
+              Admin Login
+            </h2>
+            <p className="mt-2 text-gray-500 text-sm">
+              Loading...
+            </p>
+          </div>
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <div>
+                <div className="h-10 bg-gray-200 rounded-xl animate-pulse"></div>
+              </div>
+              <div>
+                <div className="h-10 bg-gray-200 rounded-xl animate-pulse"></div>
+              </div>
+            </div>
+            <div className="h-12 bg-gray-200 rounded-xl animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+      <div className="hidden lg:block w-[50%] min-h-screen relative overflow-hidden bg-gray-200 animate-pulse" />
+    </div>
+  );
+}
+
+// Main page component with Suspense
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={<LoginFormFallback />}>
+      <AdminLoginForm />
+    </Suspense>
   );
 }
