@@ -1,3 +1,4 @@
+
 // // app/admin/page.tsx
 // "use client";
 
@@ -176,7 +177,7 @@
 //           />
 //           <StatCard
 //             title="Total Sales"
-//             value={`₹${(stats.totalSales / 100000).toFixed(1)}L`}
+//             value={`৳${(stats.totalSales / 100000).toFixed(1)}L`}
 //             icon={<TrendingUp className="h-6 w-6" />}
 //             color="green"
 //             trend="up"
@@ -249,7 +250,7 @@
 //                 <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12 }} />
 //                 <Tooltip />
 //                 <Legend />
-//                 <Bar yAxisId="left" dataKey="revenue" fill="#3b82f6" name="Revenue (₹)" />
+//                 <Bar yAxisId="left" dataKey="revenue" fill="#3b82f6" name="Revenue (৳)" />
 //                 <Bar yAxisId="right" dataKey="orders" fill="#10b981" name="Orders" />
 //               </BarChart>
 //             </ResponsiveContainer>
@@ -265,8 +266,8 @@
 //                 <YAxis tick={{ fontSize: 12 }} />
 //                 <Tooltip />
 //                 <Legend />
-//                 <Line type="monotone" dataKey="collected" stroke="#10b981" strokeWidth={2} name="Collected (₹)" />
-//                 <Line type="monotone" dataKey="due" stroke="#f59e0b" strokeWidth={2} name="Due (₹)" />
+//                 <Line type="monotone" dataKey="collected" stroke="#10b981" strokeWidth={2} name="Collected (৳)" />
+//                 <Line type="monotone" dataKey="due" stroke="#f59e0b" strokeWidth={2} name="Due (৳)" />
 //               </LineChart>
 //             </ResponsiveContainer>
 //           </div>
@@ -294,7 +295,7 @@
 //                     <div className="flex items-center gap-2 text-xs text-gray-500">
 //                       <span>{order.id}</span>
 //                       <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-//                       <span>₹{order.amount.toFixed(2)}</span>
+//                       <span>৳{order.amount.toFixed(2)}</span>
 //                     </div>
 //                   </div>
 //                   <OrderStatusBadge status={order.status} />
@@ -566,11 +567,44 @@ import {
 } from "recharts";
 
 // ============================================================
+// TYPE DEFINITIONS
+// ============================================================
+
+type OrderStatus = "pending" | "approved" | "completed" | "rejected";
+
+interface Order {
+  id: string;
+  customer: string;
+  amount: number;
+  status: OrderStatus;
+  date: string;
+}
+
+interface LowStockProduct {
+  name: string;
+  stock: number;
+  minStock: number;
+  unit: string;
+}
+
+interface WeeklySale {
+  day: string;
+  revenue: number;
+  orders: number;
+}
+
+interface MonthlyCollection {
+  month: string;
+  collected: number;
+  due: number;
+}
+
+// ============================================================
 // MOCK DATA – Replace with API calls
 // ============================================================
 
 // Recent Orders
-const RECENT_ORDERS = [
+const RECENT_ORDERS: Order[] = [
   { id: "ORD-1001", customer: "Green Valley Constructions", amount: 12500, status: "pending", date: "2025-01-20" },
   { id: "ORD-1002", customer: "Apex Builders", amount: 8700, status: "approved", date: "2025-01-20" },
   { id: "ORD-1003", customer: "Kolkata Infrastructure Ltd", amount: 21500, status: "completed", date: "2025-01-19" },
@@ -579,14 +613,14 @@ const RECENT_ORDERS = [
 ];
 
 // Low Stock Products
-const LOW_STOCK_PRODUCTS = [
+const LOW_STOCK_PRODUCTS: LowStockProduct[] = [
   { name: "Anti-Corrosive Primer", stock: 8, minStock: 12, unit: "Ltr" },
   { name: "SuperPlast PC-500", stock: 0, minStock: 10, unit: "Ltr" },
   { name: "Epoxy Floor Paint", stock: 12, minStock: 10, unit: "Ltr" },
 ];
 
 // Weekly Sales Data (last 7 days)
-const WEEKLY_SALES = [
+const WEEKLY_SALES: WeeklySale[] = [
   { day: "Mon", revenue: 125000, orders: 12 },
   { day: "Tue", revenue: 158000, orders: 15 },
   { day: "Wed", revenue: 92000, orders: 8 },
@@ -597,7 +631,7 @@ const WEEKLY_SALES = [
 ];
 
 // Monthly Collection Data
-const MONTHLY_COLLECTION = [
+const MONTHLY_COLLECTION: MonthlyCollection[] = [
   { month: "Jan", collected: 450000, due: 120000 },
   { month: "Feb", collected: 520000, due: 80000 },
   { month: "Mar", collected: 380000, due: 150000 },
@@ -995,7 +1029,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend, t
 };
 
 interface OrderStatusBadgeProps {
-  status: "pending" | "approved" | "completed" | "rejected";
+  status: OrderStatus;
 }
 
 const OrderStatusBadge: React.FC<OrderStatusBadgeProps> = ({ status }) => {

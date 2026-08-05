@@ -348,7 +348,7 @@ export default function CustomersPage() {
   <select
     name="area"
     value={formData.area}
-    onChange={handleFormChange}
+    
     className={`w-full px-3 py-2 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
       formErrors.area ? "border-red-500" : "border-gray-300"
     }`}

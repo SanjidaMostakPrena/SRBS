@@ -285,7 +285,7 @@ export default function DealersPage() {
       // Add new
       const newDealer: Dealer = {
         id: `d${Date.now()}`,
-        dealerCode,
+        
         ...formData,
         createdAt: new Date().toISOString().split("T")[0],
       }
