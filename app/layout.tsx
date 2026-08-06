@@ -1,4 +1,31 @@
 
+// // app/layout.tsx
+// import type { Metadata } from "next";
+// import { Inter } from "next/font/google";
+// import "./globals.css";
+// import { AuthProvider } from "./context/AuthContext";
+
+// const inter = Inter({ subsets: ["latin"] });
+
+// export const metadata: Metadata = {
+//   title: "SRBS Panel",
+// };
+
+// export default function RootLayout({
+//   children,
+// }: Readonly<{
+//   children: React.ReactNode;
+// }>) {
+//   return (
+//     <html lang="en">
+//       <body className={inter.className}>
+//         <AuthProvider>
+//           {children}
+//         </AuthProvider>
+//       </body>
+//     </html>
+//   );
+// }
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -9,6 +36,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "SRBS Panel",
+  description: "SRBS Management Panel",
 };
 
 export default function RootLayout({
@@ -18,6 +46,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+        <meta charSet="utf-8" />
+      </head>
       <body className={inter.className}>
         <AuthProvider>
           {children}

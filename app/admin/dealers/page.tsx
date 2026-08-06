@@ -1,3 +1,4 @@
+
 // "use client"
 
 // import React, { useState, useMemo } from "react"
@@ -252,7 +253,7 @@
 //     }
 
 //     // Generate dealerCode if not provided
-//     const dealerCode =
+//     const finalDealerCode =
 //       formData.dealerCode.trim() ||
 //       `D${String(dealers.length + 1).padStart(3, "0")}`
 
@@ -269,7 +270,7 @@
 //           d.id === editingDealer.id
 //             ? {
 //                 ...d,
-//                 dealerCode,
+//                 dealerCode: finalDealerCode,
 //                 name: formData.name,
 //                 contactPerson: formData.contactPerson,
 //                 phone: formData.phone,
@@ -282,11 +283,17 @@
 //         )
 //       )
 //     } else {
-//       // Add new
+//       // Add new - FIXED: Don't spread formData to avoid duplicate dealerCode
 //       const newDealer: Dealer = {
 //         id: `d${Date.now()}`,
-//         dealerCode,
-//         ...formData,
+//         dealerCode: finalDealerCode,
+//         name: formData.name,
+//         contactPerson: formData.contactPerson,
+//         phone: formData.phone,
+//         email: formData.email,
+//         address: formData.address,
+//         area: formData.area,
+//         gstNumber: formData.gstNumber,
 //         createdAt: new Date().toISOString().split("T")[0],
 //       }
 //       setDealers((prev) => [newDealer, ...prev])
@@ -639,6 +646,9 @@
 //                       </option>
 //                     ))}
 //                   </select>
+//                 </div>
+//                 <div>
+                  
 //                 </div>
 //               </div>
 
@@ -1070,9 +1080,9 @@ export default function DealersPage() {
   // ---------- Loading / Error ----------
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
         <div className="text-center">
-          <Loader2 className="mx-auto mb-4 h-12 w-12 animate-spin text-blue-600" />
+          <Loader2 className="mx-auto mb-4 h-10 w-10 sm:h-12 sm:w-12 animate-spin text-blue-600" />
           <p className="text-gray-600">Loading dealers...</p>
         </div>
       </div>
@@ -1082,13 +1092,13 @@ export default function DealersPage() {
   if (error) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-        <div className="max-w-md rounded-2xl border border-red-200 bg-white/80 p-8 text-center shadow-xl backdrop-blur-md">
-          <AlertCircle className="mx-auto mb-4 h-14 w-14 text-red-500" />
-          <h2 className="text-xl font-bold text-red-700">Error</h2>
-          <p className="mt-2 text-red-600">{error}</p>
+        <div className="w-full max-w-md rounded-2xl border border-red-200 bg-white/80 p-6 sm:p-8 text-center shadow-xl backdrop-blur-md">
+          <AlertCircle className="mx-auto mb-4 h-12 w-12 sm:h-14 sm:w-14 text-red-500" />
+          <h2 className="text-lg sm:text-xl font-bold text-red-700">Error</h2>
+          <p className="mt-2 text-sm sm:text-base text-red-600">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-6 rounded-xl bg-gradient-to-r from-red-500 to-red-600 px-6 py-2 text-white transition hover:shadow-lg"
+            className="mt-6 rounded-xl bg-gradient-to-r from-red-500 to-red-600 px-5 sm:px-6 py-2 text-sm sm:text-base text-white transition hover:shadow-lg"
           >
             Retry
           </button>
@@ -1101,54 +1111,54 @@ export default function DealersPage() {
   // RENDER
   // ============================================================
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-3 sm:p-4 md:p-6 lg:p-8">
       {/* Background decorations */}
-      <div className="pointer-events-none absolute top-0 right-0 h-96 w-96 translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-bl from-blue-200/20 to-indigo-200/20 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 left-0 h-80 w-80 -translate-x-1/2 translate-y-1/2 rounded-full bg-gradient-to-tr from-purple-200/20 to-pink-200/20 blur-3xl" />
+      <div className="pointer-events-none absolute top-0 right-0 h-64 w-64 sm:h-80 sm:w-80 md:h-96 md:w-96 translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-bl from-blue-200/20 to-indigo-200/20 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 sm:h-80 sm:w-80 md:h-80 md:w-80 -translate-x-1/2 translate-y-1/2 rounded-full bg-gradient-to-tr from-purple-200/20 to-pink-200/20 blur-3xl" />
 
       <div className="relative z-10 mx-auto max-w-7xl">
         {/* Header */}
-        <div className="mb-8 flex flex-col gap-4 rounded-3xl border border-white/40 bg-white/30 p-6 shadow-xl backdrop-blur-xl md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-4">
-            <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-3 text-white shadow-lg">
-              <Store className="h-8 w-8" />
+        <div className="mb-4 sm:mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-white/40 bg-white/30 p-4 sm:p-5 md:p-6 shadow-xl backdrop-blur-xl">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-2.5 sm:p-3 text-white shadow-lg flex-shrink-0">
+              <Store className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />
             </div>
             <div>
-              <h1 className="bg-gradient-to-r from-blue-700 to-indigo-800 bg-clip-text text-3xl font-bold text-transparent">
+              <h1 className="text-xl sm:text-2xl md:text-3xl bg-gradient-to-r from-blue-700 to-indigo-800 bg-clip-text font-bold text-transparent">
                 Dealer Management
               </h1>
-              <p className="text-gray-600">
+              <p className="text-xs sm:text-sm text-gray-600">
                 Manage all dealers and distributors
               </p>
             </div>
           </div>
           <button
             onClick={handleAddNew}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 px-5 py-2 font-semibold text-white shadow-lg transition hover:scale-105 hover:shadow-xl"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 px-4 sm:px-5 py-2 text-sm sm:text-base font-semibold text-white shadow-lg transition hover:scale-105 hover:shadow-xl"
           >
-            <Plus className="h-5 w-5" />
+            <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
             Add Dealer
           </button>
         </div>
 
         {/* Filters */}
-        <div className="mb-6 rounded-3xl border border-white/50 bg-white/70 p-6 shadow-2xl backdrop-blur-xl">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center">
+        <div className="mb-4 sm:mb-6 rounded-2xl sm:rounded-3xl border border-white/50 bg-white/70 p-4 sm:p-5 md:p-6 shadow-2xl backdrop-blur-xl">
+          <div className="flex flex-col gap-3 sm:gap-4 md:flex-row md:items-center">
             <div className="relative flex-1">
-              <Search className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute top-1/2 left-3 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search by dealer name, contact person, phone, code or area..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-xl border-2 border-gray-200 bg-white/50 py-2 pr-4 pl-10 backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+                className="w-full rounded-xl border-2 border-gray-200 bg-white/50 py-1.5 sm:py-2 pr-3 sm:pr-4 pl-9 sm:pl-10 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
               />
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               <select
                 value={areaFilter}
                 onChange={(e) => setAreaFilter(e.target.value)}
-                className="rounded-xl border-2 border-gray-200 bg-white/50 px-4 py-2 backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+                className="flex-1 sm:flex-none rounded-xl border-2 border-gray-200 bg-white/50 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
               >
                 <option value="all">All Areas</option>
                 {AVAILABLE_AREAS.map((area) => (
@@ -1162,37 +1172,37 @@ export default function DealersPage() {
                   setSearchTerm("")
                   setAreaFilter("all")
                 }}
-                className="flex items-center gap-2 rounded-xl bg-gray-200/70 px-4 py-2 backdrop-blur-sm transition hover:bg-gray-300/70"
+                className="flex items-center gap-1 sm:gap-2 rounded-xl bg-gray-200/70 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base backdrop-blur-sm transition hover:bg-gray-300/70"
               >
-                <X className="h-4 w-4" />
-                Clear
+                <X className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">Clear</span>
               </button>
             </div>
           </div>
         </div>
 
         {/* Dealers Table */}
-        <div className="overflow-hidden rounded-3xl border border-white/50 bg-white/70 shadow-2xl backdrop-blur-xl">
+        <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-white/50 bg-white/70 shadow-2xl backdrop-blur-xl">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-xs sm:text-sm">
               <thead className="border-b border-gray-200/50 bg-gradient-to-r from-blue-50 to-indigo-50">
                 <tr>
-                  <th className="px-6 py-4 text-left font-semibold text-gray-700">
+                  <th className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-left font-semibold text-gray-700">
                     #
                   </th>
-                  <th className="px-6 py-4 text-left font-semibold text-gray-700">
+                  <th className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-left font-semibold text-gray-700">
                     Code
                   </th>
-                  <th className="px-6 py-4 text-left font-semibold text-gray-700">
+                  <th className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-left font-semibold text-gray-700">
                     Dealer Info
                   </th>
-                  <th className="px-6 py-4 text-left font-semibold text-gray-700">
+                  <th className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-left font-semibold text-gray-700 hidden sm:table-cell">
                     Contact
                   </th>
-                  <th className="px-6 py-4 text-left font-semibold text-gray-700">
+                  <th className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-left font-semibold text-gray-700 hidden md:table-cell">
                     Area
                   </th>
-                  <th className="px-6 py-4 text-center font-semibold text-gray-700">
+                  <th className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-center font-semibold text-gray-700">
                     Actions
                   </th>
                 </tr>
@@ -1200,9 +1210,9 @@ export default function DealersPage() {
               <tbody>
                 {filteredDealers.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="py-10 text-center text-gray-400">
-                      <Store className="mx-auto mb-2 h-12 w-12 opacity-30" />
-                      <p>No dealers found</p>
+                    <td colSpan={6} className="py-8 sm:py-10 text-center text-gray-400">
+                      <Store className="mx-auto mb-2 h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 opacity-30" />
+                      <p className="text-sm sm:text-base">No dealers found</p>
                     </td>
                   </tr>
                 ) : (
@@ -1211,54 +1221,54 @@ export default function DealersPage() {
                       key={dealer.id}
                       className="border-b border-gray-100/60 transition hover:bg-white/30"
                     >
-                      <td className="px-6 py-4 text-gray-500">{index + 1}</td>
-                      <td className="px-6 py-4">
-                        <span className="font-mono text-sm font-medium text-gray-700">
+                      <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-gray-500">{index + 1}</td>
+                      <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+                        <span className="font-mono text-[10px] sm:text-xs md:text-sm font-medium text-gray-700">
                           {dealer.dealerCode}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
                         <div>
-                          <p className="font-medium text-gray-800">
+                          <p className="font-medium text-gray-800 text-xs sm:text-sm">
                             {dealer.name}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-[10px] sm:text-xs text-gray-500 truncate max-w-[120px] sm:max-w-[200px]">
                             {dealer.address}
                           </p>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 hidden sm:table-cell">
                         <div>
-                          <p className="text-sm text-gray-700">
+                          <p className="text-xs sm:text-sm text-gray-700">
                             {dealer.contactPerson}
                           </p>
-                          <p className="flex items-center gap-1 text-xs text-gray-500">
-                            <Phone className="h-3 w-3" />
+                          <p className="flex items-center gap-1 text-[10px] sm:text-xs text-gray-500">
+                            <Phone className="h-2 w-2 sm:h-3 sm:w-3" />
                             {dealer.phone}
                           </p>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <span className="flex items-center gap-1 text-sm text-gray-700">
-                          <MapPin className="h-3 w-3 text-gray-400" />
+                      <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 hidden md:table-cell">
+                        <span className="flex items-center gap-1 text-xs sm:text-sm text-gray-700">
+                          <MapPin className="h-2 w-2 sm:h-3 sm:w-3 text-gray-400" />
                           {dealer.area}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-center">
-                        <div className="flex items-center justify-center gap-2">
+                      <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-center">
+                        <div className="flex items-center justify-center gap-1 sm:gap-2">
                           <button
                             onClick={() => handleEdit(dealer)}
                             className="rounded-full p-1 text-blue-600 transition hover:bg-blue-100/50 hover:text-blue-800"
                             title="Edit"
                           >
-                            <Edit className="h-5 w-5" />
+                            <Edit className="h-4 w-4 sm:h-5 sm:w-5" />
                           </button>
                           <button
                             onClick={() => handleDelete(dealer)}
                             className="rounded-full p-1 text-red-500 transition hover:bg-red-100/50 hover:text-red-700"
                             title="Delete"
                           >
-                            <Trash2 className="h-5 w-5" />
+                            <Trash2 className="h-4 w-4 sm:h-5 sm:w-5" />
                           </button>
                         </div>
                       </td>
@@ -1268,7 +1278,7 @@ export default function DealersPage() {
               </tbody>
             </table>
           </div>
-          <div className="border-t border-gray-200/50 bg-white/30 px-6 py-3 text-sm text-gray-500 backdrop-blur-sm">
+          <div className="border-t border-gray-200/50 bg-white/30 px-3 sm:px-4 md:px-6 py-2 sm:py-3 text-[10px] sm:text-xs text-gray-500 backdrop-blur-sm">
             Showing {filteredDealers.length} of {totalDealers} dealers
           </div>
         </div>
@@ -1276,26 +1286,26 @@ export default function DealersPage() {
 
       {/* Add/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-          <div className="animate-fadeIn max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-white/50 bg-white/95 p-6 shadow-2xl backdrop-blur-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4 backdrop-blur-sm">
+          <div className="animate-fadeIn max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl sm:rounded-3xl border border-white/50 bg-white/95 p-4 sm:p-5 md:p-6 shadow-2xl backdrop-blur-xl mx-2 sm:mx-4">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-gray-800">
-                <Store className="h-5 w-5 text-blue-600" />
+              <h2 className="flex items-center gap-2 text-lg sm:text-xl font-bold text-gray-800">
+                <Store className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
                 {editingDealer ? "Edit Dealer" : "Add New Dealer"}
               </h2>
               <button
                 onClick={handleCloseModal}
                 className="text-gray-400 transition hover:text-gray-600"
               >
-                <X className="h-6 w-6" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
             </div>
 
-            <form onSubmit={handleModalSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <form onSubmit={handleModalSubmit} className="space-y-3 sm:space-y-4">
+              <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">
-                    Dealer Code{" "}
+                  <label className="mb-1 block text-xs sm:text-sm font-medium text-gray-700">
+                    Dealer Code 
                   </label>
                   <input
                     type="text"
@@ -1304,11 +1314,11 @@ export default function DealersPage() {
                       setFormData({ ...formData, dealerCode: e.target.value })
                     }
                     placeholder="e.g., D001 (auto‑generated if blank)"
-                    className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-4 py-2 backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+                    className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                  <label className="mb-1 block text-xs sm:text-sm font-medium text-gray-700">
                     Dealer Name
                   </label>
                   <input
@@ -1318,15 +1328,15 @@ export default function DealersPage() {
                       setFormData({ ...formData, name: e.target.value })
                     }
                     placeholder="e.g., Mumbai Hardware Stores"
-                    className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-4 py-2 backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+                    className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
                     required
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                  <label className="mb-1 block text-xs sm:text-sm font-medium text-gray-700">
                     Phone
                   </label>
                   <input
@@ -1336,12 +1346,12 @@ export default function DealersPage() {
                       setFormData({ ...formData, phone: e.target.value })
                     }
                     placeholder="+91 98765 43210"
-                    className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-4 py-2 backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+                    className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
                     required
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                  <label className="mb-1 block text-xs sm:text-sm font-medium text-gray-700">
                     Email
                   </label>
                   <input
@@ -1351,13 +1361,13 @@ export default function DealersPage() {
                       setFormData({ ...formData, email: e.target.value })
                     }
                     placeholder="info@company.com"
-                    className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-4 py-2 backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+                    className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
+                <label className="mb-1 block text-xs sm:text-sm font-medium text-gray-700">
                   Address
                 </label>
                 <input
@@ -1367,13 +1377,13 @@ export default function DealersPage() {
                     setFormData({ ...formData, address: e.target.value })
                   }
                   placeholder="e.g., 123, Linking Road, Bandra"
-                  className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-4 py-2 backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+                  className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
                 />
               </div>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                  <label className="mb-1 block text-xs sm:text-sm font-medium text-gray-700">
                     Area
                   </label>
                   <select
@@ -1381,7 +1391,7 @@ export default function DealersPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, area: e.target.value })
                     }
-                    className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-4 py-2 backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+                    className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
                     required
                   >
                     <option value="">Select an area</option>
@@ -1392,47 +1402,47 @@ export default function DealersPage() {
                     ))}
                   </select>
                 </div>
-                <div>
-                  
-                </div>
+              
               </div>
 
               {modalError && (
-                <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-                  <AlertCircle className="h-4 w-4" />
-                  {modalError}
+                <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-2.5 sm:p-3 text-xs sm:text-sm text-red-700">
+                  <AlertCircle className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                  <span>{modalError}</span>
                 </div>
               )}
               {modalSuccess && (
-                <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 p-3 text-sm text-green-700">
-                  <CheckCircle className="h-4 w-4" />
-                  {editingDealer
-                    ? "Dealer updated successfully!"
-                    : "Dealer added successfully!"}
+                <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 p-2.5 sm:p-3 text-xs sm:text-sm text-green-700">
+                  <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                  <span>
+                    {editingDealer
+                      ? "Dealer updated successfully!"
+                      : "Dealer added successfully!"}
+                  </span>
                 </div>
               )}
 
-              <div className="flex gap-3 border-t border-gray-200 pt-4">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 border-t border-gray-200 pt-4">
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="flex-1 rounded-xl bg-gray-100 px-4 py-2 text-gray-700 transition hover:bg-gray-200"
+                  className="flex-1 rounded-xl bg-gray-100 px-4 py-2 text-sm sm:text-base text-gray-700 transition hover:bg-gray-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting || modalSuccess}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700 disabled:opacity-50"
+                  className="flex-1 rounded-xl bg-blue-600 px-4 py-2 text-sm sm:text-base text-white transition hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
                       Saving...
                     </>
                   ) : (
                     <>
-                      <Save className="h-5 w-5" />
+                      <Save className="h-4 w-4 sm:h-5 sm:w-5" />
                       {editingDealer ? "Update" : "Add"} Dealer
                     </>
                   )}
@@ -1445,33 +1455,33 @@ export default function DealersPage() {
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-          <div className="animate-fadeIn w-full max-w-md rounded-3xl border border-white/50 bg-white/95 p-6 shadow-2xl backdrop-blur-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4 backdrop-blur-sm">
+          <div className="animate-fadeIn w-full max-w-md rounded-2xl sm:rounded-3xl border border-white/50 bg-white/95 p-4 sm:p-5 md:p-6 shadow-2xl backdrop-blur-xl mx-2 sm:mx-4">
             <div className="mb-4 flex items-center gap-3">
-              <div className="rounded-full bg-red-100 p-2">
-                <AlertCircle className="h-6 w-6 text-red-600" />
+              <div className="rounded-full bg-red-100 p-2 flex-shrink-0">
+                <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
               </div>
-              <h2 className="text-xl font-bold text-gray-800">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-800">
                 Confirm Delete
               </h2>
             </div>
-            <p className="text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               Are you sure you want to delete{" "}
               <span className="font-semibold text-gray-800">
                 {deleteTarget.name}
               </span>
               ? This action cannot be undone.
             </p>
-            <div className="mt-6 flex gap-3 border-t border-gray-200 pt-4">
+            <div className="mt-6 flex flex-col sm:flex-row gap-2 sm:gap-3 border-t border-gray-200 pt-4">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="flex-1 rounded-xl bg-gray-100 px-4 py-2 text-gray-700 transition hover:bg-gray-200"
+                className="flex-1 rounded-xl bg-gray-100 px-4 py-2 text-sm sm:text-base text-gray-700 transition hover:bg-gray-200"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="flex-1 rounded-xl bg-red-600 px-4 py-2 text-white transition hover:bg-red-700"
+                className="flex-1 rounded-xl bg-red-600 px-4 py-2 text-sm sm:text-base text-white transition hover:bg-red-700"
               >
                 Delete Dealer
               </button>

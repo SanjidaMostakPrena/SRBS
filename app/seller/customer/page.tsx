@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useMemo } from "react";
@@ -173,7 +172,7 @@ export default function CustomersPage() {
     setShowProfileModal(true);
   };
 
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -252,23 +251,23 @@ export default function CustomersPage() {
 
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 animate-fadeIn">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 animate-fadeIn">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">{title}</h2>
             <button
               onClick={() => {
                 isEdit ? setShowEditModal(false) : setShowAddModal(false);
                 resetForm();
                 setSelectedCustomer(null);
               }}
-              className="text-gray-400 hover:text-gray-600 transition"
+              className="text-gray-400 hover:text-gray-600 transition p-1"
             >
-              <X className="h-6 w-6" />
+              <X className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Name 
@@ -341,50 +340,46 @@ export default function CustomersPage() {
               )}
             </div>
 
-           <div>
-  <label className="block text-sm font-medium text-gray-700 mb-1">
-    Area
-  </label>
-  <select
-    name="area"
-    value={formData.area}
-    
-    className={`w-full px-3 py-2 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
-      formErrors.area ? "border-red-500" : "border-gray-300"
-    }`}
-  >
-    <option value="">Select Area</option>
-    <option value="Mumbai">Mumbai</option>
-    <option value="Delhi">Delhi</option>
-    <option value="Chennai">Chennai</option>
-    <option value="Kolkata">Kolkata</option>
-    <option value="Bangalore">Bangalore</option>
-    <option value="Hyderabad">Hyderabad</option>
-    <option value="Pune">Pune</option>
-    <option value="Ahmedabad">Ahmedabad</option>
-  </select>
-  {formErrors.area && (
-    <p className="text-red-500 text-sm mt-1">{formErrors.area}</p>
-  )}
-</div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Area
+              </label>
+              <select
+                name="area"
+                value={formData.area}
+                onChange={handleFormChange}
+                className={`w-full px-3 py-2 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
+                  formErrors.area ? "border-red-500" : "border-gray-300"
+                }`}
+              >
+                <option value="">Select Area</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Pune">Pune</option>
+                <option value="Ahmedabad">Ahmedabad</option>
+              </select>
+              {formErrors.area && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.area}</p>
+              )}
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Current Due (৳)
-                </label>
-                <input
-                  type="number"
-                  name="currentDue"
-                  min="0"
-                  step="0.01"
-                  value={formData.currentDue}
-                  onChange={handleFormChange}
-                  className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                />
-              </div>
-              
-              
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Current Due (৳)
+              </label>
+              <input
+                type="number"
+                name="currentDue"
+                min="0"
+                step="0.01"
+                value={formData.currentDue}
+                onChange={handleFormChange}
+                className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              />
             </div>
 
             {submitSuccess && (
@@ -394,7 +389,7 @@ export default function CustomersPage() {
               </div>
             )}
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+            <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-200">
               <button
                 type="button"
                 onClick={() => {
@@ -429,57 +424,57 @@ export default function CustomersPage() {
     const c = selectedCustomer;
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 animate-fadeIn">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-4 sm:p-6 animate-fadeIn">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Customer Profile</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Customer Profile</h2>
             <button
               onClick={() => setShowProfileModal(false)}
-              className="text-gray-400 hover:text-gray-600 transition"
+              className="text-gray-400 hover:text-gray-600 transition p-1"
             >
-              <X className="h-6 w-6" />
+              <X className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
           </div>
 
           <div className="space-y-6">
             {/* Header */}
-            <div className="flex items-center gap-4 pb-4 border-b border-gray-200">
-              <div className="bg-blue-100 p-3 rounded-full">
-                <Building2 className="h-10 w-10 text-blue-700" />
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 pb-4 border-b border-gray-200">
+              <div className="bg-blue-100 p-3 rounded-full self-start sm:self-auto">
+                <Building2 className="h-8 w-8 sm:h-10 sm:w-10 text-blue-700" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-800">{c.name}</h3>
-                <p className="text-sm text-gray-500">{c.email}</p>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-800">{c.name}</h3>
+                <p className="text-sm text-gray-500 break-all">{c.email}</p>
               </div>
             </div>
 
             {/* Details grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex items-center gap-2">
-                <Phone className="h-5 w-5 text-gray-400" />
-                <span className="text-gray-700">{c.phone}</span>
+                <Phone className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                <span className="text-gray-700 break-all">{c.phone}</span>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-gray-400" />
-                <span className="text-gray-700">{c.address}</span>
+                <MapPin className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                <span className="text-gray-700 break-all">{c.address}</span>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-gray-400" />
+                <MapPin className="h-5 w-5 text-gray-400 flex-shrink-0" />
                 <span className="text-gray-700">Area: {c.area}</span>
               </div>
               <div className="flex items-center gap-2">
-                <IndianRupee className="h-5 w-5 text-gray-400" />
+                <IndianRupee className="h-5 w-5 text-gray-400 flex-shrink-0" />
                 <span className="text-gray-700">
                   Current Due: <span className="font-semibold text-amber-600">৳{c.currentDue.toFixed(2)}</span>
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-gray-400" />
+                <Clock className="h-5 w-5 text-gray-400 flex-shrink-0" />
                 <span className="text-gray-700">
                   Last Order: {new Date(c.lastOrder).toLocaleDateString()}
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <ShoppingBag className="h-5 w-5 text-gray-400" />
+                <ShoppingBag className="h-5 w-5 text-gray-400 flex-shrink-0" />
                 <span className="text-gray-700">
                   Total Purchase: <span className="font-semibold text-blue-700">৳{c.totalPurchase.toFixed(2)}</span>
                 </span>
@@ -491,13 +486,13 @@ export default function CustomersPage() {
               <p>Customer since: {new Date(c.createdAt).toLocaleDateString()}</p>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+            <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-200">
               <button
                 onClick={() => {
                   setShowProfileModal(false);
                   openEditModal(c);
                 }}
-                className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition flex items-center gap-2"
+                className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition flex items-center justify-center gap-2"
               >
                 <Edit className="h-4 w-4" />
                 Edit
@@ -519,38 +514,38 @@ export default function CustomersPage() {
   // MAIN RENDER
   // ============================================================
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-3 sm:p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4 bg-white p-4 rounded-2xl shadow-md border border-gray-200">
-          <div className="flex items-center gap-4">
-            <div className="bg-blue-700 text-white p-3 rounded-xl shadow-md">
-              <Users className="h-8 w-8" />
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-4 bg-white p-4 rounded-2xl shadow-md border border-gray-200">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="bg-blue-700 text-white p-2 sm:p-3 rounded-xl shadow-md flex-shrink-0">
+              <Users className="h-6 w-6 sm:h-8 sm:w-8" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-blue-800">SRBS Admixture & Paint</h1>
-              <p className="text-sm text-gray-500">Customer Management</p>
+              <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-blue-800">SRBS Admixture & Paint</h1>
+              <p className="text-xs sm:text-sm text-gray-500">Customer Management</p>
             </div>
           </div>
           <button
             onClick={openAddModal}
-            className="bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded-xl font-semibold flex items-center gap-2 shadow-md hover:shadow-lg transition"
+            className="bg-blue-700 hover:bg-blue-800 text-white px-4 sm:px-5 py-2 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition text-sm sm:text-base"
           >
-            <Plus className="h-5 w-5" />
-            Add Customer
+            <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span>Add Customer</span>
           </button>
         </div>
 
         {/* Search & filter */}
-        <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-4 mb-6">
+        <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-3 sm:p-4 mb-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
             <input
               type="text"
               placeholder="Search customers by name, phone, email, area..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
             />
           </div>
         </div>
@@ -558,23 +553,22 @@ export default function CustomersPage() {
         {/* Customer Table */}
         <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-xs sm:text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Name</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Phone</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Address</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Area</th>
-                  <th className="text-right px-4 py-3 font-semibold text-gray-600">Due (৳)</th>
-                  <th className="text-right px-4 py-3 font-semibold text-gray-600">Last Order</th>
-                  <th className="text-right px-4 py-3 font-semibold text-gray-600">Total Purchase</th>
-                  <th className="text-center px-4 py-3 font-semibold text-gray-600">Actions</th>
+                  <th className="text-left px-2 sm:px-4 py-2 sm:py-3 font-semibold text-gray-600">Name</th>
+                  <th className="text-left px-2 sm:px-4 py-2 sm:py-3 font-semibold text-gray-600 hidden sm:table-cell">Phone</th>
+                  <th className="text-left px-2 sm:px-4 py-2 sm:py-3 font-semibold text-gray-600 hidden md:table-cell">Address</th>
+                  <th className="text-left px-2 sm:px-4 py-2 sm:py-3 font-semibold text-gray-600 hidden lg:table-cell">Area</th>
+                  <th className="text-right px-2 sm:px-4 py-2 sm:py-3 font-semibold text-gray-600">Due (৳)</th>
+                  <th className="text-right px-2 sm:px-4 py-2 sm:py-3 font-semibold text-gray-600 hidden md:table-cell">Last Order</th>
+                  <th className="text-center px-2 sm:px-4 py-2 sm:py-3 font-semibold text-gray-600">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredCustomers.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="text-center py-8 text-gray-400">
+                    <td colSpan={7} className="text-center py-6 sm:py-8 text-gray-400 text-sm">
                       No customers found
                     </td>
                   </tr>
@@ -585,41 +579,46 @@ export default function CustomersPage() {
                       className="border-b border-gray-100 hover:bg-blue-50/50 transition cursor-pointer"
                       onClick={() => openProfileModal(customer)}
                     >
-                      <td className="px-4 py-3 font-medium text-gray-800">{customer.name}</td>
-                      <td className="px-4 py-3 text-gray-600">{customer.phone}</td>
-                      <td className="px-4 py-3 text-gray-600 truncate max-w-[150px]">{customer.address}</td>
-                      <td className="px-4 py-3 text-gray-600">{customer.area}</td>
-                      <td className={`px-4 py-3 text-right font-medium ${customer.currentDue > 0 ? "text-amber-600" : "text-green-600"}`}>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-800 text-xs sm:text-sm break-words max-w-[100px] sm:max-w-[150px]">
+                        {customer.name}
+                      </td>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-600 hidden sm:table-cell text-xs sm:text-sm">
+                        {customer.phone}
+                      </td>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-600 hidden md:table-cell text-xs sm:text-sm truncate max-w-[120px] sm:max-w-[150px]">
+                        {customer.address}
+                      </td>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-600 hidden lg:table-cell text-xs sm:text-sm">
+                        {customer.area}
+                      </td>
+                      <td className={`px-2 sm:px-4 py-2 sm:py-3 text-right font-medium text-xs sm:text-sm ${customer.currentDue > 0 ? "text-amber-600" : "text-green-600"}`}>
                         ৳{customer.currentDue.toFixed(2)}
                       </td>
-                      <td className="px-4 py-3 text-right text-gray-600">
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-right text-gray-600 hidden md:table-cell text-xs sm:text-sm">
                         {new Date(customer.lastOrder).toLocaleDateString()}
                       </td>
-                      <td className="px-4 py-3 text-right font-medium text-blue-700">
-                        ৳{customer.totalPurchase.toFixed(2)}
-                      </td>
-                      <td className="px-4 py-3 text-center">
-                        <div className="flex items-center justify-center gap-1" onClick={(e) => e.stopPropagation()}>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-center">
+                        <div className="flex items-center justify-center gap-1 sm:gap-1.5" onClick={(e) => e.stopPropagation()}>
                           <button
                             onClick={() => openEditModal(customer)}
-                            className="p-1.5 rounded-lg text-blue-600 hover:bg-blue-100 transition"
+                            className="p-1 sm:p-1.5 rounded-lg text-blue-600 hover:bg-blue-100 transition"
                             title="Edit"
                           >
-                            <Edit className="h-4 w-4" />
+                            <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
                           </button>
                           <button
                             onClick={() => openProfileModal(customer)}
-                            className="p-1.5 rounded-lg text-gray-600 hover:bg-gray-100 transition"
+                            className="p-1 sm:p-1.5 rounded-lg text-gray-600 hover:bg-gray-100 transition"
                             title="View Profile"
                           >
-                            <Eye className="h-4 w-4" />
+                            <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
                           </button>
                           <button
                             onClick={() => handleDelete(customer.id)}
-                            className="p-1.5 rounded-lg text-red-500 hover:bg-red-100 transition"
+                            className="p-1 sm:p-1.5 rounded-lg text-red-500 hover:bg-red-100 transition"
                             title="Delete"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                           </button>
                         </div>
                       </td>

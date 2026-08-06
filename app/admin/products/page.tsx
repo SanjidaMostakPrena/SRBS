@@ -1,3 +1,4 @@
+
 // // app/admin/products/page.tsx
 // "use client";
 
@@ -10,15 +11,10 @@
 //   Edit,
 //   Trash2,
 //   CheckCircle,
-//   XCircle,
 //   AlertCircle,
 //   X,
 //   Loader2,
 //   Save,
-//   Layers,
-//   ToggleLeft,
-//   ToggleRight,
-//   IndianRupee,
 //   Filter,
 //   Tag,
 // } from "lucide-react";
@@ -33,7 +29,6 @@
 //   bottleSize: string;
 //   buyingPrice: number;
 //   sellingPrice: number;
-//   status: "active" | "inactive";
 // }
 
 // // ============================================================
@@ -47,7 +42,6 @@
 //     bottleSize: "5 Ltr",
 //     buyingPrice: 850,
 //     sellingPrice: 1250,
-//     status: "active",
 //   },
 //   {
 //     id: "p2",
@@ -56,7 +50,6 @@
 //     bottleSize: "4 Kg",
 //     buyingPrice: 580,
 //     sellingPrice: 850,
-//     status: "active",
 //   },
 //   {
 //     id: "p3",
@@ -65,7 +58,6 @@
 //     bottleSize: "1 Ltr",
 //     buyingPrice: 1500,
 //     sellingPrice: 2200,
-//     status: "active",
 //   },
 //   {
 //     id: "p4",
@@ -74,7 +66,6 @@
 //     bottleSize: "20 Ltr",
 //     buyingPrice: 680,
 //     sellingPrice: 980,
-//     status: "inactive",
 //   },
 //   {
 //     id: "p5",
@@ -83,7 +74,6 @@
 //     bottleSize: "1 Ltr",
 //     buyingPrice: 420,
 //     sellingPrice: 640,
-//     status: "active",
 //   },
 //   {
 //     id: "p6",
@@ -92,7 +82,6 @@
 //     bottleSize: "1 Ltr",
 //     buyingPrice: 780,
 //     sellingPrice: 1120,
-//     status: "active",
 //   },
 //   {
 //     id: "p7",
@@ -101,7 +90,6 @@
 //     bottleSize: "1 Ltr",
 //     buyingPrice: 980,
 //     sellingPrice: 1450,
-//     status: "inactive",
 //   },
 //   {
 //     id: "p8",
@@ -110,7 +98,6 @@
 //     bottleSize: "10 Kg",
 //     buyingPrice: 320,
 //     sellingPrice: 490,
-//     status: "active",
 //   },
 // ];
 
@@ -126,7 +113,6 @@
 //   // Search and filters
 //   const [searchTerm, setSearchTerm] = useState("");
 //   const [categoryFilter, setCategoryFilter] = useState<string>("all");
-//   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
 
 //   // Modal states
 //   const [showModal, setShowModal] = useState(false);
@@ -137,7 +123,6 @@
 //     bottleSize: "",
 //     buyingPrice: 0,
 //     sellingPrice: 0,
-//     status: "active",
 //   });
 //   const [isSubmitting, setIsSubmitting] = useState(false);
 //   const [modalError, setModalError] = useState<string | null>(null);
@@ -167,16 +152,10 @@
 //     if (categoryFilter !== "all") {
 //       result = result.filter((p) => p.category === categoryFilter);
 //     }
-//     if (statusFilter !== "all") {
-//       result = result.filter((p) => p.status === statusFilter);
-//     }
 //     return result;
-//   }, [products, searchTerm, categoryFilter, statusFilter]);
+//   }, [products, searchTerm, categoryFilter]);
 
 //   const totalProducts = products.length;
-//   const activeProducts = products.filter((p) => p.status === "active").length;
-//   const inactiveProducts = products.filter((p) => p.status === "inactive").length;
-//   const totalStockValue = products.reduce((sum, p) => sum + p.sellingPrice * 1, 0); // simplified
 
 //   // ---------- Handlers ----------
 //   const handleAddNew = () => {
@@ -187,7 +166,6 @@
 //       bottleSize: "",
 //       buyingPrice: 0,
 //       sellingPrice: 0,
-//       status: "active",
 //     });
 //     setModalError(null);
 //     setModalSuccess(false);
@@ -202,7 +180,6 @@
 //       bottleSize: product.bottleSize,
 //       buyingPrice: product.buyingPrice,
 //       sellingPrice: product.sellingPrice,
-//       status: product.status,
 //     });
 //     setModalError(null);
 //     setModalSuccess(false);
@@ -212,17 +189,6 @@
 //   const handleDelete = (product: Product) => {
 //     setDeleteTarget(product);
 //     setShowDeleteConfirm(true);
-//   };
-
-//   const handleToggleStatus = (product: Product) => {
-//     const newStatus = product.status === "active" ? "inactive" : "active";
-//     updateProduct({ ...product, status: newStatus });
-//   };
-
-//   const updateProduct = (updated: Product) => {
-//     setProducts((prev) =>
-//       prev.map((p) => (p.id === updated.id ? updated : p))
-//     );
 //   };
 
 //   const handleModalSubmit = async (e: React.FormEvent) => {
@@ -266,7 +232,6 @@
 //                 bottleSize: formData.bottleSize,
 //                 buyingPrice: formData.buyingPrice,
 //                 sellingPrice: formData.sellingPrice,
-//                 status: formData.status,
 //               }
 //             : p
 //         )
@@ -365,7 +330,6 @@
 //           </button>
 //         </div>
 
-
 //         {/* Filters */}
 //         <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-white/50 mb-6">
 //           <div className="flex flex-col md:flex-row md:items-center gap-4">
@@ -391,20 +355,10 @@
 //                   </option>
 //                 ))}
 //               </select>
-//               <select
-//                 value={statusFilter}
-//                 onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
-//                 className="px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
-//               >
-//                 <option value="all">All Status</option>
-//                 <option value="active">Active</option>
-//                 <option value="inactive">Inactive</option>
-//               </select>
 //               <button
 //                 onClick={() => {
 //                   setSearchTerm("");
 //                   setCategoryFilter("all");
-//                   setStatusFilter("all");
 //                 }}
 //                 className="px-4 py-2 bg-gray-200/70 backdrop-blur-sm rounded-xl hover:bg-gray-300/70 transition flex items-center gap-2"
 //               >
@@ -425,16 +379,15 @@
 //                   <th className="text-left px-6 py-4 font-semibold text-gray-700">Product Name</th>
 //                   <th className="text-left px-6 py-4 font-semibold text-gray-700">Category</th>
 //                   <th className="text-center px-6 py-4 font-semibold text-gray-700">Bottle Size</th>
-//                   <th className="text-right px-6 py-4 font-semibold text-gray-700">Buying (₹)</th>
-//                   <th className="text-right px-6 py-4 font-semibold text-gray-700">Selling (₹)</th>
-//                   <th className="text-center px-6 py-4 font-semibold text-gray-700">Status</th>
+//                   <th className="text-right px-6 py-4 font-semibold text-gray-700">Buying (৳)</th>
+//                   <th className="text-right px-6 py-4 font-semibold text-gray-700">Selling (৳)</th>
 //                   <th className="text-center px-6 py-4 font-semibold text-gray-700">Actions</th>
 //                 </tr>
 //               </thead>
 //               <tbody>
 //                 {filteredProducts.length === 0 ? (
 //                   <tr>
-//                     <td colSpan={8} className="text-center py-10 text-gray-400">
+//                     <td colSpan={7} className="text-center py-10 text-gray-400">
 //                       <Package className="h-12 w-12 mx-auto mb-2 opacity-30" />
 //                       <p>No products found</p>
 //                     </td>
@@ -452,13 +405,10 @@
 //                         {product.bottleSize}
 //                       </td>
 //                       <td className="px-6 py-4 text-right font-medium text-gray-700">
-//                         ₹{product.buyingPrice.toFixed(2)}
+//                         ৳{product.buyingPrice.toFixed(2)}
 //                       </td>
 //                       <td className="px-6 py-4 text-right font-bold text-blue-700">
-//                         ₹{product.sellingPrice.toFixed(2)}
-//                       </td>
-//                       <td className="px-6 py-4 text-center">
-//                         <StatusBadge status={product.status} />
+//                         ৳{product.sellingPrice.toFixed(2)}
 //                       </td>
 //                       <td className="px-6 py-4 text-center">
 //                         <div className="flex items-center justify-center gap-2">
@@ -468,21 +418,6 @@
 //                             title="Edit"
 //                           >
 //                             <Edit className="h-5 w-5" />
-//                           </button>
-//                           <button
-//                             onClick={() => handleToggleStatus(product)}
-//                             className={`${
-//                               product.status === "active"
-//                                 ? "text-amber-600 hover:text-amber-800"
-//                                 : "text-green-600 hover:text-green-800"
-//                             } p-1 rounded-full hover:bg-gray-100/50 transition`}
-//                             title={product.status === "active" ? "Deactivate" : "Activate"}
-//                           >
-//                             {product.status === "active" ? (
-//                               <ToggleLeft className="h-5 w-5" />
-//                             ) : (
-//                               <ToggleRight className="h-5 w-5" />
-//                             )}
 //                           </button>
 //                           <button
 //                             onClick={() => handleDelete(product)}
@@ -566,7 +501,7 @@
 //               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 //                 <div>
 //                   <label className="block text-sm font-medium text-gray-700 mb-1">
-//                     Buying Price (₹) <span className="text-red-500">*</span>
+//                     Buying Price (৳) <span className="text-red-500">*</span>
 //                   </label>
 //                   <input
 //                     type="number"
@@ -583,7 +518,7 @@
 //                 </div>
 //                 <div>
 //                   <label className="block text-sm font-medium text-gray-700 mb-1">
-//                     Selling Price (₹) <span className="text-red-500">*</span>
+//                     Selling Price (৳) <span className="text-red-500">*</span>
 //                   </label>
 //                   <input
 //                     type="number"
@@ -597,32 +532,6 @@
 //                     className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
 //                     required
 //                   />
-//                 </div>
-//               </div>
-
-//               <div>
-//                 <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-//                 <div className="flex gap-4">
-//                   <label className="flex items-center gap-2 cursor-pointer">
-//                     <input
-//                       type="radio"
-//                       value="active"
-//                       checked={formData.status === "active"}
-//                       onChange={() => setFormData({ ...formData, status: "active" })}
-//                       className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-//                     />
-//                     <span className="text-sm font-medium text-gray-700">Active</span>
-//                   </label>
-//                   <label className="flex items-center gap-2 cursor-pointer">
-//                     <input
-//                       type="radio"
-//                       value="inactive"
-//                       checked={formData.status === "inactive"}
-//                       onChange={() => setFormData({ ...formData, status: "inactive" })}
-//                       className="h-4 w-4 text-red-600 focus:ring-red-500"
-//                     />
-//                     <span className="text-sm font-medium text-gray-700">Inactive</span>
-//                   </label>
 //                 </div>
 //               </div>
 
@@ -715,31 +624,6 @@
 //     </div>
 //   );
 // }
-
-// // ============================================================
-// // COMPONENTS
-// // ============================================================
-
-// interface StatusBadgeProps {
-//   status: "active" | "inactive";
-// }
-
-// const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
-//   if (status === "active") {
-//     return (
-//       <span className="text-xs font-medium px-3 py-1 rounded-full bg-green-100 text-green-700 inline-flex items-center gap-1">
-//         <CheckCircle className="h-3 w-3" />
-//         Active
-//       </span>
-//     );
-//   }
-//   return (
-//     <span className="text-xs font-medium px-3 py-1 rounded-full bg-red-100 text-red-700 inline-flex items-center gap-1">
-//       <XCircle className="h-3 w-3" />
-//       Inactive
-//     </span>
-//   );
-// };
 // app/admin/products/page.tsx
 "use client";
 
@@ -1043,52 +927,53 @@ export default function ProductsPage() {
   // RENDER
   // ============================================================
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8 relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-200/20 to-indigo-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-purple-200/20 to-pink-200/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-3 sm:p-4 md:p-8 relative overflow-hidden">
+      {/* Background decorations - hidden on mobile */}
+      <div className="absolute top-0 right-0 w-48 sm:w-64 md:w-96 h-48 sm:h-64 md:h-96 bg-gradient-to-bl from-blue-200/20 to-indigo-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-40 sm:w-60 md:w-80 h-40 sm:h-60 md:h-80 bg-gradient-to-tr from-purple-200/20 to-pink-200/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4 bg-white/30 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/40">
-          <div className="flex items-center gap-4">
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-3 rounded-2xl shadow-lg">
-              <Package className="h-8 w-8" />
+        {/* Header - responsive */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 md:mb-8 gap-3 sm:gap-4 bg-white/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl border border-white/40">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-lg">
+              <Package className="h-6 w-6 sm:h-8 sm:w-8" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-700 to-indigo-800 bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-700 to-indigo-800 bg-clip-text text-transparent">
                 Product Management
               </h1>
-              <p className="text-gray-600">Manage all products and inventory</p>
+              <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">Manage all products and inventory</p>
             </div>
           </div>
           <button
             onClick={handleAddNew}
-            className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-5 py-2 rounded-xl font-semibold flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 transition"
+            className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-semibold flex items-center gap-1.5 sm:gap-2 shadow-lg hover:shadow-xl hover:scale-105 transition text-sm sm:text-base flex-shrink-0"
           >
-            <Plus className="h-5 w-5" />
-            Add Product
+            <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="hidden xs:inline">Add Product</span>
+            <span className="xs:hidden">Add</span>
           </button>
         </div>
 
-        {/* Filters */}
-        <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-white/50 mb-6">
-          <div className="flex flex-col md:flex-row md:items-center gap-4">
+        {/* Filters - responsive */}
+        <div className="bg-white/70 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/50 mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4 sm:h-5 sm:w-5" />
               <input
                 type="text"
-                placeholder="Search by product name, category or bottle size..."
+                placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
+                className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 text-sm sm:text-base border-2 border-gray-200 rounded-lg sm:rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
               />
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
+                className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base border-2 border-gray-200 rounded-lg sm:rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm flex-1 sm:flex-none"
               >
                 {categories.map((cat) => (
                   <option key={cat} value={cat}>
@@ -1101,36 +986,36 @@ export default function ProductsPage() {
                   setSearchTerm("");
                   setCategoryFilter("all");
                 }}
-                className="px-4 py-2 bg-gray-200/70 backdrop-blur-sm rounded-xl hover:bg-gray-300/70 transition flex items-center gap-2"
+                className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-200/70 backdrop-blur-sm rounded-lg sm:rounded-xl hover:bg-gray-300/70 transition flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
               >
-                <X className="h-4 w-4" />
-                Clear
+                <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">Clear</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Products Table */}
-        <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 overflow-hidden">
+        {/* Products Table - responsive */}
+        <div className="bg-white/70 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl border border-white/50 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-xs sm:text-sm">
               <thead className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200/50">
                 <tr>
-                  <th className="text-left px-6 py-4 font-semibold text-gray-700">#</th>
-                  <th className="text-left px-6 py-4 font-semibold text-gray-700">Product Name</th>
-                  <th className="text-left px-6 py-4 font-semibold text-gray-700">Category</th>
-                  <th className="text-center px-6 py-4 font-semibold text-gray-700">Bottle Size</th>
-                  <th className="text-right px-6 py-4 font-semibold text-gray-700">Buying (৳)</th>
-                  <th className="text-right px-6 py-4 font-semibold text-gray-700">Selling (৳)</th>
-                  <th className="text-center px-6 py-4 font-semibold text-gray-700">Actions</th>
+                  <th className="text-left px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 font-semibold text-gray-700 hidden xs:table-cell">#</th>
+                  <th className="text-left px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 font-semibold text-gray-700">Product</th>
+                  <th className="text-left px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 font-semibold text-gray-700 hidden sm:table-cell">Category</th>
+                  <th className="text-center px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 font-semibold text-gray-700 hidden md:table-cell">Size</th>
+                  <th className="text-right px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 font-semibold text-gray-700 hidden lg:table-cell">Buying</th>
+                  <th className="text-right px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 font-semibold text-gray-700">Selling</th>
+                  <th className="text-center px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 font-semibold text-gray-700">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredProducts.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-10 text-gray-400">
-                      <Package className="h-12 w-12 mx-auto mb-2 opacity-30" />
-                      <p>No products found</p>
+                    <td colSpan={7} className="text-center py-6 sm:py-10 text-gray-400">
+                      <Package className="h-8 w-8 sm:h-12 sm:w-12 mx-auto mb-1 sm:mb-2 opacity-30" />
+                      <p className="text-xs sm:text-sm">No products found</p>
                     </td>
                   </tr>
                 ) : (
@@ -1139,33 +1024,27 @@ export default function ProductsPage() {
                       key={product.id}
                       className="border-b border-gray-100/60 hover:bg-white/30 transition"
                     >
-                      <td className="px-6 py-4 text-gray-500">{index + 1}</td>
-                      <td className="px-6 py-4 font-medium text-gray-800">{product.name}</td>
-                      <td className="px-6 py-4 text-gray-600">{product.category}</td>
-                      <td className="px-6 py-4 text-center font-medium text-gray-700">
-                        {product.bottleSize}
-                      </td>
-                      <td className="px-6 py-4 text-right font-medium text-gray-700">
-                        ৳{product.buyingPrice.toFixed(2)}
-                      </td>
-                      <td className="px-6 py-4 text-right font-bold text-blue-700">
-                        ৳{product.sellingPrice.toFixed(2)}
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <div className="flex items-center justify-center gap-2">
+                      <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-gray-500 hidden xs:table-cell text-xs sm:text-sm">{index + 1}</td>
+                      <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 font-medium text-gray-800 text-xs sm:text-sm truncate max-w-[80px] xs:max-w-[120px] sm:max-w-none">{product.name}</td>
+                      <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-gray-600 hidden sm:table-cell text-xs sm:text-sm truncate max-w-[80px]">{product.category}</td>
+                      <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-center font-medium text-gray-700 hidden md:table-cell text-xs sm:text-sm">{product.bottleSize}</td>
+                      <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right font-medium text-gray-700 hidden lg:table-cell text-xs sm:text-sm">৳{product.buyingPrice.toFixed(2)}</td>
+                      <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right font-bold text-blue-700 text-xs sm:text-sm">৳{product.sellingPrice.toFixed(2)}</td>
+                      <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-center">
+                        <div className="flex items-center justify-center gap-1 sm:gap-2">
                           <button
                             onClick={() => handleEdit(product)}
                             className="text-blue-600 hover:text-blue-800 p-1 rounded-full hover:bg-blue-100/50 transition"
                             title="Edit"
                           >
-                            <Edit className="h-5 w-5" />
+                            <Edit className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5" />
                           </button>
                           <button
                             onClick={() => handleDelete(product)}
                             className="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-100/50 transition"
                             title="Delete"
                           >
-                            <Trash2 className="h-5 w-5" />
+                            <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5" />
                           </button>
                         </div>
                       </td>
@@ -1175,30 +1054,30 @@ export default function ProductsPage() {
               </tbody>
             </table>
           </div>
-          <div className="px-6 py-3 border-t border-gray-200/50 text-sm text-gray-500 bg-white/30 backdrop-blur-sm">
+          <div className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 border-t border-gray-200/50 text-[10px] sm:text-sm text-gray-500 bg-white/30 backdrop-blur-sm">
             Showing {filteredProducts.length} of {totalProducts} products
           </div>
         </div>
       </div>
 
-      {/* Add/Edit Modal */}
+      {/* Add/Edit Modal - responsive */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 animate-fadeIn border border-white/50">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                <Package className="h-5 w-5 text-blue-600" />
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4">
+          <div className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 animate-fadeIn border border-white/50">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-800 flex items-center gap-2">
+                <Package className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
                 {editingProduct ? "Edit Product" : "Add New Product"}
               </h2>
               <button onClick={handleCloseModal} className="text-gray-400 hover:text-gray-600 transition">
-                <X className="h-6 w-6" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
             </div>
 
-            <form onSubmit={handleModalSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={handleModalSubmit} className="space-y-3 sm:space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                     Product Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -1206,12 +1085,12 @@ export default function ProductsPage() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g., SuperPlast PC-300"
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
+                    className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base border-2 border-gray-200 rounded-lg sm:rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                     Category <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -1219,14 +1098,14 @@ export default function ProductsPage() {
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     placeholder="e.g., Admixture"
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
+                    className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base border-2 border-gray-200 rounded-lg sm:rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   Bottle Size <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -1234,14 +1113,14 @@ export default function ProductsPage() {
                   value={formData.bottleSize}
                   onChange={(e) => setFormData({ ...formData, bottleSize: e.target.value })}
                   placeholder="e.g., 5 Ltr, 4 Kg, 1 Ltr"
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
+                  className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base border-2 border-gray-200 rounded-lg sm:rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
                   required
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                     Buying Price (৳) <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -1253,12 +1132,12 @@ export default function ProductsPage() {
                       setFormData({ ...formData, buyingPrice: parseFloat(e.target.value) || 0 })
                     }
                     placeholder="0.00"
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
+                    className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base border-2 border-gray-200 rounded-lg sm:rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                     Selling Price (৳) <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -1270,46 +1149,46 @@ export default function ProductsPage() {
                       setFormData({ ...formData, sellingPrice: parseFloat(e.target.value) || 0 })
                     }
                     placeholder="0.00"
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
+                    className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base border-2 border-gray-200 rounded-lg sm:rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 outline-none transition-all bg-white/50 backdrop-blur-sm"
                     required
                   />
                 </div>
               </div>
 
               {modalError && (
-                <div className="bg-red-50 text-red-700 p-3 rounded-xl text-sm flex items-center gap-2 border border-red-200">
-                  <AlertCircle className="h-4 w-4" />
+                <div className="bg-red-50 text-red-700 p-2.5 sm:p-3 rounded-lg sm:rounded-xl text-xs sm:text-sm flex items-center gap-2 border border-red-200">
+                  <AlertCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   {modalError}
                 </div>
               )}
               {modalSuccess && (
-                <div className="bg-green-50 text-green-700 p-3 rounded-xl text-sm flex items-center gap-2 border border-green-200">
-                  <CheckCircle className="h-4 w-4" />
+                <div className="bg-green-50 text-green-700 p-2.5 sm:p-3 rounded-lg sm:rounded-xl text-xs sm:text-sm flex items-center gap-2 border border-green-200">
+                  <CheckCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   {editingProduct ? "Product updated successfully!" : "Product added successfully!"}
                 </div>
               )}
 
-              <div className="flex gap-3 pt-4 border-t border-gray-200">
+              <div className="flex flex-col xs:flex-row gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-gray-200">
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition"
+                  className="flex-1 px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-100 text-gray-700 rounded-lg sm:rounded-xl hover:bg-gray-200 transition text-sm sm:text-base"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting || modalSuccess}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-600 text-white rounded-lg sm:rounded-xl hover:bg-blue-700 transition disabled:opacity-50 flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base"
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
                       Saving...
                     </>
                   ) : (
                     <>
-                      <Save className="h-5 w-5" />
+                      <Save className="h-4 w-4 sm:h-5 sm:w-5" />
                       {editingProduct ? "Update" : "Add"} Product
                     </>
                   )}
@@ -1320,30 +1199,30 @@ export default function ProductsPage() {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Confirmation Modal - responsive */}
       {showDeleteConfirm && deleteTarget && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl max-w-md w-full p-6 animate-fadeIn border border-white/50">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="bg-red-100 p-2 rounded-full">
-                <AlertCircle className="h-6 w-6 text-red-600" />
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4">
+          <div className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl max-w-md w-full p-4 sm:p-6 animate-fadeIn border border-white/50">
+            <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+              <div className="bg-red-100 p-1.5 sm:p-2 rounded-full">
+                <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
               </div>
-              <h2 className="text-xl font-bold text-gray-800">Confirm Delete</h2>
+              <h2 className="text-lg sm:text-xl font-bold text-gray-800">Confirm Delete</h2>
             </div>
-            <p className="text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               Are you sure you want to delete <span className="font-semibold text-gray-800">{deleteTarget.name}</span>?
               This action cannot be undone.
             </p>
-            <div className="flex gap-3 mt-6 pt-4 border-t border-gray-200">
+            <div className="flex flex-col xs:flex-row gap-2 sm:gap-3 mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-gray-200">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition"
+                className="flex-1 px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-100 text-gray-700 rounded-lg sm:rounded-xl hover:bg-gray-200 transition text-sm sm:text-base"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition"
+                className="flex-1 px-3 sm:px-4 py-1.5 sm:py-2 bg-red-600 text-white rounded-lg sm:rounded-xl hover:bg-red-700 transition text-sm sm:text-base"
               >
                 Delete Product
               </button>
@@ -1360,6 +1239,10 @@ export default function ProductsPage() {
         }
         .animate-fadeIn {
           animation: fadeIn 0.2s ease-out;
+        }
+        @media (min-width: 480px) {
+          .xs\\:inline { display: inline; }
+          .xs\\:table-cell { display: table-cell; }
         }
       `}</style>
     </div>
