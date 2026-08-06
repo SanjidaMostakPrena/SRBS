@@ -678,7 +678,7 @@ function LoginForm() {
             </button>
 
             <div className="text-xs sm:text-sm text-center mt-3 sm:mt-4">
-              <Link href="/admin-login" className="text-orange-600 hover:text-orange-500 font-medium">
+              <Link href="/admin" className="text-orange-600 hover:text-orange-500 font-medium">
                 ← Login as Admin
               </Link>
             </div>
