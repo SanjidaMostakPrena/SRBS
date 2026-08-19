@@ -84,6 +84,7 @@ export default function AdminLayout({
     { icon: Package, label: "TSM", href: "/admin/tsm" },
      { icon: Package, label: "Area Manager", href: "/admin/areamanager" },
        { icon: Users, label: "Area Management", href: "/admin/area" },
+           { icon: Store, label: "All Customer", href: "/admin/customer" },
     { icon: ShoppingCart, label: " Seller Order Management", href: "/admin/orders" },
     { icon: ShoppingCart, label: " Dealer Order Management", href: "/admin/dealerorder" },
     { icon: Package, label: "Product Management", href: "/admin/products" },
