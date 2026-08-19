@@ -1,824 +1,1895 @@
-// app/orders/new/page.tsx
-"use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+// "use client"
+
+// import React, { useState, useMemo } from "react"
+// import {
+//   ShoppingBag,
+//   Search,
+//   Filter,
+//   Calendar,
+//   Clock,
+//   ChevronDown,
+//   ChevronUp,
+//   Eye,
+//   Printer,
+//   Download,
+//   X,
+//   Loader2,
+//   AlertCircle,
+//   CheckCircle,
+//   XCircle,
+//   Package,
+//   Truck,
+//   Home,
+//   User,
+//   Mail,
+//   Phone,
+//   MapPin,
+//   DollarSign,
+//   Tag,
+//   FileText,
+//   CreditCard,
+//   ArrowUpRight,
+//   ArrowDownRight,
+//   MoreVertical,
+//   ChevronLeft,
+//   ChevronRight,
+// } from "lucide-react"
+
+// // ============================================================
+// // TYPES
+// // ============================================================
+// interface OrderItem {
+//   id: string
+//   productName: string
+//   quantity: number
+//   price: number
+//   total: number
+//   image?: string
+// }
+
+// interface Order {
+//   id: string
+//   orderNumber: string
+//   customerName: string
+//   customerEmail: string
+//   customerPhone: string
+//   customerAddress: string
+//   items: OrderItem[]
+//   subtotal: number
+//   tax: number
+//   shipping: number
+//   discount: number
+//   total: number
+//   status: "pending" | "processing" | "shipped" | "delivered" | "cancelled"
+//   paymentStatus: "paid" | "unpaid" | "refunded"
+//   paymentMethod: "credit_card" | "debit_card" | "cash" | "bank_transfer"
+//   orderDate: string
+//   shippedDate?: string
+//   deliveredDate?: string
+//   notes?: string
+// }
+
+// // ============================================================
+// // MOCK DATA
+// // ============================================================
+// const MOCK_ORDERS: Order[] = [
+//   {
+//     id: "ord-001",
+//     orderNumber: "ORD-2026-001",
+//     customerName: "Rajesh Kumar",
+//     customerEmail: "rajesh@email.com",
+//     customerPhone: "+91 98765 43210",
+//     customerAddress: "123, BKC Complex, Bandra, Mumbai - 400051",
+//     items: [
+//       {
+//         id: "item-1",
+//         productName: "Cement Bag - 50kg (Birla)",
+//         quantity: 10,
+//         price: 350,
+//         total: 3500,
+//       },
+//       {
+//         id: "item-2",
+//         productName: "TMT Steel Rod - 12mm (SAIL)",
+//         quantity: 25,
+//         price: 620,
+//         total: 15500,
+//       },
+//     ],
+//     subtotal: 19000,
+//     tax: 1800,
+//     shipping: 500,
+//     discount: 1000,
+//     total: 20300,
+//     status: "delivered",
+//     paymentStatus: "paid",
+//     paymentMethod: "credit_card",
+//     orderDate: "2026-01-15T10:30:00",
+//     shippedDate: "2026-01-16T14:20:00",
+//     deliveredDate: "2026-01-18T11:45:00",
+//     notes: "Handle with care - fragile items",
+//   },
+//   {
+//     id: "ord-002",
+//     orderNumber: "ORD-2026-002",
+//     customerName: "Priya Sharma",
+//     customerEmail: "priya@email.com",
+//     customerPhone: "+91 87654 32109",
+//     customerAddress: "456, Park Street, Kolkata - 700016",
+//     items: [
+//       {
+//         id: "item-3",
+//         productName: "Paint - Premium Emulsion (Asian Paints)",
+//         quantity: 15,
+//         price: 850,
+//         total: 12750,
+//       },
+//     ],
+//     subtotal: 12750,
+//     tax: 1200,
+//     shipping: 300,
+//     discount: 500,
+//     total: 13750,
+//     status: "shipped",
+//     paymentStatus: "paid",
+//     paymentMethod: "debit_card",
+//     orderDate: "2026-02-10T09:15:00",
+//     shippedDate: "2026-02-12T16:40:00",
+//   },
+//   {
+//     id: "ord-003",
+//     orderNumber: "ORD-2026-003",
+//     customerName: "Amit Singh",
+//     customerEmail: "amit@email.com",
+//     customerPhone: "+91 76543 21098",
+//     customerAddress: "789, Connaught Place, Delhi - 110001",
+//     items: [
+//       {
+//         id: "item-4",
+//         productName: "Bricks - Red Clay (Pack of 100)",
+//         quantity: 50,
+//         price: 280,
+//         total: 14000,
+//       },
+//       {
+//         id: "item-5",
+//         productName: "Sand - River Sand (Per Ton)",
+//         quantity: 5,
+//         price: 1200,
+//         total: 6000,
+//       },
+//     ],
+//     subtotal: 20000,
+//     tax: 1900,
+//     shipping: 800,
+//     discount: 0,
+//     total: 22700,
+//     status: "pending",
+//     paymentStatus: "unpaid",
+//     paymentMethod: "cash",
+//     orderDate: "2026-03-05T11:20:00",
+//   },
+//   {
+//     id: "ord-004",
+//     orderNumber: "ORD-2026-004",
+//     customerName: "Sneha Reddy",
+//     customerEmail: "sneha@email.com",
+//     customerPhone: "+91 65432 10987",
+//     customerAddress: "101, Anna Nagar, Chennai - 600040",
+//     items: [
+//       {
+//         id: "item-6",
+//         productName: "Waterproofing Chemical - Liquid (Dr. Fixit)",
+//         quantity: 8,
+//         price: 450,
+//         total: 3600,
+//       },
+//     ],
+//     subtotal: 3600,
+//     tax: 340,
+//     shipping: 200,
+//     discount: 200,
+//     total: 3940,
+//     status: "processing",
+//     paymentStatus: "paid",
+//     paymentMethod: "bank_transfer",
+//     orderDate: "2026-03-12T08:45:00",
+//   },
+//   {
+//     id: "ord-005",
+//     orderNumber: "ORD-2026-005",
+//     customerName: "Vikram Patel",
+//     customerEmail: "vikram@email.com",
+//     customerPhone: "+91 54321 09876",
+//     customerAddress: "202, MG Road, Bangalore - 560001",
+//     items: [
+//       {
+//         id: "item-7",
+//         productName: "Wood Polish - Teak Finish (Melamine)",
+//         quantity: 12,
+//         price: 320,
+//         total: 3840,
+//       },
+//       {
+//         id: "item-8",
+//         productName: "Laminates - Premium Grade (Greenlam)",
+//         quantity: 20,
+//         price: 450,
+//         total: 9000,
+//       },
+//     ],
+//     subtotal: 12840,
+//     tax: 1200,
+//     shipping: 400,
+//     discount: 800,
+//     total: 13640,
+//     status: "cancelled",
+//     paymentStatus: "refunded",
+//     paymentMethod: "credit_card",
+//     orderDate: "2026-03-20T14:10:00",
+//     notes: "Customer cancelled due to delivery delay",
+//   },
+//   {
+//     id: "ord-006",
+//     orderNumber: "ORD-2026-006",
+//     customerName: "Ananya Gupta",
+//     customerEmail: "ananya@email.com",
+//     customerPhone: "+91 43210 98765",
+//     customerAddress: "303, Jubilee Hills, Hyderabad - 500033",
+//     items: [
+//       {
+//         id: "item-9",
+//         productName: "Ceramic Tiles - Vitrified (Kajaria)",
+//         quantity: 30,
+//         price: 580,
+//         total: 17400,
+//       },
+//     ],
+//     subtotal: 17400,
+//     tax: 1650,
+//     shipping: 600,
+//     discount: 1200,
+//     total: 18450,
+//     status: "delivered",
+//     paymentStatus: "paid",
+//     paymentMethod: "debit_card",
+//     orderDate: "2026-04-02T13:25:00",
+//     shippedDate: "2026-04-03T10:15:00",
+//     deliveredDate: "2026-04-05T09:30:00",
+//   },
+// ]
+
+// // ============================================================
+// // STATUS BADGE COMPONENT
+// // ============================================================
+// const StatusBadge: React.FC<{ status: Order["status"] }> = ({ status }) => {
+//   const config = {
+//     pending: { color: "bg-yellow-100 text-yellow-800", icon: Clock },
+//     processing: { color: "bg-blue-100 text-blue-800", icon: Package },
+//     shipped: { color: "bg-purple-100 text-purple-800", icon: Truck },
+//     delivered: { color: "bg-green-100 text-green-800", icon: CheckCircle },
+//     cancelled: { color: "bg-red-100 text-red-800", icon: XCircle },
+//   }
+
+//   const { color, icon: Icon } = config[status]
+//   return (
+//     <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${color}`}>
+//       <Icon className="h-3 w-3" />
+//       {status.charAt(0).toUpperCase() + status.slice(1)}
+//     </span>
+//   )
+// }
+
+// // ============================================================
+// // MAIN COMPONENT
+// // ============================================================
+// export default function OrderHistoryPage() {
+//   // ---------- State ----------
+//   const [orders, setOrders] = useState<Order[]>(MOCK_ORDERS)
+//   const [loading, setLoading] = useState(false)
+//   const [error, setError] = useState<string | null>(null)
+
+//   // Search and filters
+//   const [searchTerm, setSearchTerm] = useState("")
+//   const [statusFilter, setStatusFilter] = useState<Order["status"] | "all">("all")
+//   const [paymentFilter, setPaymentFilter] = useState<Order["paymentStatus"] | "all">("all")
+//   const [dateRange, setDateRange] = useState<"today" | "week" | "month" | "year" | "all">("all")
+
+//   // Pagination
+//   const [currentPage, setCurrentPage] = useState(1)
+//   const itemsPerPage = 5
+
+//   // Selected order for detail view
+//   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+//   const [showDetailModal, setShowDetailModal] = useState(false)
+
+//   // ---------- Derived ----------
+//   const filteredOrders = useMemo(() => {
+//     let result = orders
+
+//     // Search
+//     if (searchTerm.trim()) {
+//       const q = searchTerm.toLowerCase()
+//       result = result.filter(
+//         (o) =>
+//           o.orderNumber.toLowerCase().includes(q) ||
+//           o.customerName.toLowerCase().includes(q) ||
+//           o.customerEmail.toLowerCase().includes(q) ||
+//           o.customerPhone.includes(q)
+//       )
+//     }
+
+//     // Status filter
+//     if (statusFilter !== "all") {
+//       result = result.filter((o) => o.status === statusFilter)
+//     }
+
+//     // Payment filter
+//     if (paymentFilter !== "all") {
+//       result = result.filter((o) => o.paymentStatus === paymentFilter)
+//     }
+
+//     // Date range filter
+//     if (dateRange !== "all") {
+//       const now = new Date()
+//       let cutoffDate = new Date()
+
+//       switch (dateRange) {
+//         case "today":
+//           cutoffDate.setHours(0, 0, 0, 0)
+//           break
+//         case "week":
+//           cutoffDate.setDate(now.getDate() - 7)
+//           break
+//         case "month":
+//           cutoffDate.setMonth(now.getMonth() - 1)
+//           break
+//         case "year":
+//           cutoffDate.setFullYear(now.getFullYear() - 1)
+//           break
+//       }
+
+//       result = result.filter((o) => new Date(o.orderDate) >= cutoffDate)
+//     }
+
+//     // Sort by date (newest first)
+//     return result.sort((a, b) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime())
+//   }, [orders, searchTerm, statusFilter, paymentFilter, dateRange])
+
+//   // Pagination
+//   const totalPages = Math.ceil(filteredOrders.length / itemsPerPage)
+//   const paginatedOrders = filteredOrders.slice(
+//     (currentPage - 1) * itemsPerPage,
+//     currentPage * itemsPerPage
+//   )
+
+//   // Stats
+//   const stats = useMemo(() => {
+//     const total = orders.length
+//     const pending = orders.filter((o) => o.status === "pending").length
+//     const shipped = orders.filter((o) => o.status === "shipped").length
+//     const delivered = orders.filter((o) => o.status === "delivered").length
+//     const cancelled = orders.filter((o) => o.status === "cancelled").length
+//     const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0)
+
+//     return { total, pending, shipped, delivered, cancelled, totalRevenue }
+//   }, [orders])
+
+//   // ---------- Handlers ----------
+//   const handleViewOrder = (order: Order) => {
+//     setSelectedOrder(order)
+//     setShowDetailModal(true)
+//   }
+
+//   const handleCloseModal = () => {
+//     setShowDetailModal(false)
+//     setSelectedOrder(null)
+//   }
+
+//   const handlePageChange = (page: number) => {
+//     setCurrentPage(page)
+//     window.scrollTo({ top: 0, behavior: "smooth" })
+//   }
+
+//   // ---------- Loading / Error ----------
+//   if (loading) {
+//     return (
+//       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+//         <div className="text-center">
+//           <Loader2 className="mx-auto mb-4 h-12 w-12 animate-spin text-blue-600" />
+//           <p className="text-gray-600">Loading orders...</p>
+//         </div>
+//       </div>
+//     )
+//   }
+
+//   if (error) {
+//     return (
+//       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+//         <div className="max-w-md rounded-2xl border border-red-200 bg-white/80 p-8 text-center shadow-xl backdrop-blur-md">
+//           <AlertCircle className="mx-auto mb-4 h-14 w-14 text-red-500" />
+//           <h2 className="text-xl font-bold text-red-700">Error</h2>
+//           <p className="mt-2 text-red-600">{error}</p>
+//           <button
+//             onClick={() => window.location.reload()}
+//             className="mt-6 rounded-xl bg-gradient-to-r from-red-500 to-red-600 px-6 py-2 text-white transition hover:shadow-lg"
+//           >
+//             Retry
+//           </button>
+//         </div>
+//       </div>
+//     )
+//   }
+
+//   // ============================================================
+//   // RENDER
+//   // ============================================================
+//   return (
+//     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-6 lg:p-8">
+//       {/* Background decorations */}
+//       <div className="pointer-events-none fixed inset-0 overflow-hidden">
+//         <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-gradient-to-bl from-blue-200/20 to-indigo-200/20 blur-3xl" />
+//         <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-gradient-to-tr from-purple-200/20 to-pink-200/20 blur-3xl" />
+//       </div>
+
+//       <div className="relative z-10 mx-auto max-w-7xl">
+//         {/* Header */}
+//         <div className="mb-6 rounded-2xl border border-white/40 bg-white/30 p-6 shadow-xl backdrop-blur-xl md:rounded-3xl md:p-8">
+//           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+//             <div className="flex items-center gap-4">
+//               <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-3 text-white shadow-lg">
+//                 <ShoppingBag className="h-7 w-7 md:h-8 md:w-8" />
+//               </div>
+//               <div>
+//                 <h1 className="bg-gradient-to-r from-blue-700 to-indigo-800 bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
+//                   Order History
+//                 </h1>
+//                 <p className="text-sm text-gray-600">Track and manage all customer orders</p>
+//               </div>
+//             </div>
+//             <div className="flex flex-wrap items-center gap-3">
+//               <button className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 px-4 py-2 text-sm font-medium text-white shadow-lg transition hover:scale-105 hover:shadow-xl">
+//                 <Download className="h-4 w-4" />
+//                 Export
+//               </button>
+//             </div>
+//           </div>
+
+//           {/* Stats */}
+//           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+//             <div className="rounded-xl bg-white/60 p-3 backdrop-blur-sm">
+//               <p className="text-xs text-gray-500">Total Orders</p>
+//               <p className="text-lg font-bold text-gray-800">{stats.total}</p>
+//             </div>
+//             <div className="rounded-xl bg-yellow-50/60 p-3 backdrop-blur-sm">
+//               <p className="text-xs text-yellow-600">Pending</p>
+//               <p className="text-lg font-bold text-yellow-700">{stats.pending}</p>
+//             </div>
+           
+//             <div className="rounded-xl bg-green-50/60 p-3 backdrop-blur-sm">
+//               <p className="text-xs text-green-600">Delivered</p>
+//               <p className="text-lg font-bold text-green-700">{stats.delivered}</p>
+//             </div>
+//             <div className="rounded-xl bg-red-50/60 p-3 backdrop-blur-sm">
+//               <p className="text-xs text-red-600">Cancelled</p>
+//               <p className="text-lg font-bold text-red-700">{stats.cancelled}</p>
+//             </div>
+//             <div className="rounded-xl bg-blue-50/60 p-3 backdrop-blur-sm">
+//               <p className="text-xs text-blue-600">Revenue</p>
+//               <p className="text-lg font-bold text-blue-700">₹{stats.totalRevenue.toLocaleString()}</p>
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Filters */}
+//         <div className="mb-6 rounded-2xl border border-white/50 bg-white/70 p-4 shadow-2xl backdrop-blur-xl md:p-6">
+//           <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
+//             <div className="relative flex-1">
+//               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+//               <input
+//                 type="text"
+//                 placeholder="Search by order number, customer name, email or phone..."
+//                 value={searchTerm}
+//                 onChange={(e) => setSearchTerm(e.target.value)}
+//                 className="w-full rounded-xl border-2 border-gray-200 bg-white/50 py-2 pl-10 pr-4 text-sm backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+//               />
+//             </div>
+//             <div className="flex flex-wrap gap-2">
+//               <select
+//                 value={statusFilter}
+//                 onChange={(e) => setStatusFilter(e.target.value as any)}
+//                 className="rounded-xl border-2 border-gray-200 bg-white/50 px-3 py-2 text-sm backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+//               >
+//                 <option value="all">All Status</option>
+//                 <option value="pending">Pending</option>
+//                 <option value="processing">Processing</option>
+//                 <option value="shipped">Shipped</option>
+//                 <option value="delivered">Delivered</option>
+//                 <option value="cancelled">Cancelled</option>
+//               </select>
+             
+             
+//               <button
+//                 onClick={() => {
+//                   setSearchTerm("")
+//                   setStatusFilter("all")
+//                   setPaymentFilter("all")
+//                   setDateRange("all")
+//                   setCurrentPage(1)
+//                 }}
+//                 className="flex items-center gap-1 rounded-xl bg-gray-200/70 px-4 py-2 text-sm backdrop-blur-sm transition hover:bg-gray-300/70"
+//               >
+//                 <X className="h-4 w-4" />
+//                 <span className="hidden sm:inline">Clear</span>
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Orders Table */}
+//         <div className="overflow-hidden rounded-2xl border border-white/50 bg-white/70 shadow-2xl backdrop-blur-xl">
+//           <div className="overflow-x-auto">
+//             <table className="w-full text-sm">
+//               <thead className="border-b border-gray-200/50 bg-gradient-to-r from-blue-50 to-indigo-50">
+//                 <tr>
+//                   <th className="px-4 py-3 text-left font-semibold text-gray-700">Order</th>
+//                   <th className="px-4 py-3 text-left font-semibold text-gray-700 hidden md:table-cell">Customer</th>
+//                   <th className="px-4 py-3 text-left font-semibold text-gray-700 hidden lg:table-cell">Date</th>
+//                   <th className="px-4 py-3 text-left font-semibold text-gray-700">Status</th>
+//                   <th className="px-4 py-3 text-left font-semibold text-gray-700 hidden sm:table-cell">Payment</th>
+//                   <th className="px-4 py-3 text-right font-semibold text-gray-700">Amount</th>
+//                   <th className="px-4 py-3 text-center font-semibold text-gray-700">Action</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {paginatedOrders.length === 0 ? (
+//                   <tr>
+//                     <td colSpan={7} className="py-12 text-center text-gray-400">
+//                       <ShoppingBag className="mx-auto mb-3 h-12 w-12 opacity-30" />
+//                       <p className="text-base">No orders found</p>
+//                     </td>
+//                   </tr>
+//                 ) : (
+//                   paginatedOrders.map((order) => (
+//                     <tr
+//                       key={order.id}
+//                       className="border-b border-gray-100/60 transition hover:bg-white/30"
+//                     >
+//                       <td className="px-4 py-3">
+//                         <div>
+//                           <p className="font-mono text-xs font-medium text-gray-700">
+//                             {order.orderNumber}
+//                           </p>
+//                           <p className="text-xs text-gray-500 md:hidden">{order.customerName}</p>
+//                         </div>
+//                       </td>
+//                       <td className="px-4 py-3 hidden md:table-cell">
+//                         <div>
+//                           <p className="font-medium text-gray-800">{order.customerName}</p>
+//                           <p className="text-xs text-gray-500">{order.customerEmail}</p>
+//                         </div>
+//                       </td>
+//                       <td className="px-4 py-3 hidden lg:table-cell">
+//                         <div>
+//                           <p className="text-sm text-gray-700">
+//                             {new Date(order.orderDate).toLocaleDateString("en-IN", {
+//                               day: "2-digit",
+//                               month: "short",
+//                               year: "numeric",
+//                             })}
+//                           </p>
+//                           <p className="text-xs text-gray-400">
+//                             {new Date(order.orderDate).toLocaleTimeString("en-IN", {
+//                               hour: "2-digit",
+//                               minute: "2-digit",
+//                             })}
+//                           </p>
+//                         </div>
+//                       </td>
+//                       <td className="px-4 py-3">
+//                         <StatusBadge status={order.status} />
+//                       </td>
+//                       <td className="px-4 py-3 hidden sm:table-cell">
+//                         <span
+//                           className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${
+//                             order.paymentStatus === "paid"
+//                               ? "bg-green-100 text-green-700"
+//                               : order.paymentStatus === "refunded"
+//                               ? "bg-orange-100 text-orange-700"
+//                               : "bg-red-100 text-red-700"
+//                           }`}
+//                         >
+//                           {order.paymentStatus === "paid" && <CheckCircle className="h-3 w-3" />}
+//                           {order.paymentStatus === "refunded" && <ArrowDownRight className="h-3 w-3" />}
+//                           {order.paymentStatus === "unpaid" && <XCircle className="h-3 w-3" />}
+//                           {order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1)}
+//                         </span>
+//                       </td>
+//                       <td className="px-4 py-3 text-right">
+//                         <p className="font-bold text-gray-800">₹{order.total.toLocaleString()}</p>
+//                         <p className="text-xs text-gray-400">{order.items.length} items</p>
+//                       </td>
+//                       <td className="px-4 py-3 text-center">
+//                         <button
+//                           onClick={() => handleViewOrder(order)}
+//                           className="rounded-lg bg-blue-100/70 px-3 py-1.5 text-blue-700 transition hover:bg-blue-200/70 hover:text-blue-900"
+//                         >
+//                           <Eye className="h-4 w-4" />
+//                         </button>
+//                       </td>
+//                     </tr>
+//                   ))
+//                 )}
+//               </tbody>
+//             </table>
+//           </div>
+
+//           {/* Pagination */}
+//           {filteredOrders.length > 0 && (
+//             <div className="flex flex-col items-center gap-3 border-t border-gray-200/50 bg-white/30 px-4 py-3 backdrop-blur-sm sm:flex-row sm:justify-between">
+//               <p className="text-sm text-gray-500">
+//                 Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+//                 {Math.min(currentPage * itemsPerPage, filteredOrders.length)} of {filteredOrders.length} orders
+//               </p>
+//               <div className="flex items-center gap-1">
+//                 <button
+//                   onClick={() => handlePageChange(currentPage - 1)}
+//                   disabled={currentPage === 1}
+//                   className="rounded-lg px-3 py-1 text-sm text-gray-600 transition hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-transparent"
+//                 >
+//                   <ChevronLeft className="h-5 w-5" />
+//                 </button>
+//                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+//                   <button
+//                     key={page}
+//                     onClick={() => handlePageChange(page)}
+//                     className={`min-w-[32px] rounded-lg px-3 py-1 text-sm transition ${
+//                       currentPage === page
+//                         ? "bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-md"
+//                         : "text-gray-600 hover:bg-gray-100"
+//                     }`}
+//                   >
+//                     {page}
+//                   </button>
+//                 ))}
+//                 <button
+//                   onClick={() => handlePageChange(currentPage + 1)}
+//                   disabled={currentPage === totalPages}
+//                   className="rounded-lg px-3 py-1 text-sm text-gray-600 transition hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-transparent"
+//                 >
+//                   <ChevronRight className="h-5 w-5" />
+//                 </button>
+//               </div>
+//             </div>
+//           )}
+//         </div>
+//       </div>
+
+//       {/* Order Detail Modal */}
+//       {showDetailModal && selectedOrder && (
+//         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+//           <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-white/50 bg-white/95 p-6 shadow-2xl backdrop-blur-xl md:p-8">
+//             {/* Modal Header */}
+//             <div className="mb-6 flex items-start justify-between border-b border-gray-200 pb-4">
+//               <div>
+//                 <div className="flex items-center gap-3">
+//                   <h2 className="text-xl font-bold text-gray-800 md:text-2xl">
+//                     Order Details
+//                   </h2>
+//                   <StatusBadge status={selectedOrder.status} />
+//                 </div>
+//                 <p className="mt-1 font-mono text-sm text-gray-500">
+//                   {selectedOrder.orderNumber}
+//                 </p>
+//               </div>
+//               <button
+//                 onClick={handleCloseModal}
+//                 className="rounded-full bg-gray-100 p-2 text-gray-500 transition hover:bg-gray-200 hover:text-gray-700"
+//               >
+//                 <X className="h-5 w-5" />
+//               </button>
+//             </div>
+
+//             {/* Order Info Grid */}
+//             <div className="grid gap-4 md:grid-cols-2">
+//               {/* Customer Info */}
+//               <div className="rounded-xl border border-gray-200 bg-white/50 p-4 backdrop-blur-sm">
+//                 <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
+//                   <User className="h-4 w-4 text-blue-600" />
+//                   Customer Information
+//                 </h3>
+//                 <div className="space-y-2">
+//                   <p className="flex items-start gap-2 text-sm">
+//                     <User className="mt-0.5 h-4 w-4 text-gray-400" />
+//                     <span className="font-medium">{selectedOrder.customerName}</span>
+//                   </p>
+//                   <p className="flex items-start gap-2 text-sm">
+//                     <Mail className="mt-0.5 h-4 w-4 text-gray-400" />
+//                     <span>{selectedOrder.customerEmail}</span>
+//                   </p>
+//                   <p className="flex items-start gap-2 text-sm">
+//                     <Phone className="mt-0.5 h-4 w-4 text-gray-400" />
+//                     <span>{selectedOrder.customerPhone}</span>
+//                   </p>
+//                   <p className="flex items-start gap-2 text-sm">
+//                     <MapPin className="mt-0.5 h-4 w-4 text-gray-400" />
+//                     <span>{selectedOrder.customerAddress}</span>
+//                   </p>
+//                 </div>
+//               </div>
+
+//               {/* Order Info */}
+//               <div className="rounded-xl border border-gray-200 bg-white/50 p-4 backdrop-blur-sm">
+//                 <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
+//                   <Calendar className="h-4 w-4 text-blue-600" />
+//                   Order Information
+//                 </h3>
+//                 <div className="space-y-2">
+//                   <p className="flex items-start gap-2 text-sm">
+//                     <Calendar className="mt-0.5 h-4 w-4 text-gray-400" />
+//                     <span>
+//                       Ordered:{" "}
+//                       {new Date(selectedOrder.orderDate).toLocaleString("en-IN", {
+//                         day: "2-digit",
+//                         month: "short",
+//                         year: "numeric",
+//                         hour: "2-digit",
+//                         minute: "2-digit",
+//                       })}
+//                     </span>
+//                   </p>
+//                   {selectedOrder.shippedDate && (
+//                     <p className="flex items-start gap-2 text-sm">
+//                       <Truck className="mt-0.5 h-4 w-4 text-gray-400" />
+//                       <span>
+//                         Shipped:{" "}
+//                         {new Date(selectedOrder.shippedDate).toLocaleString("en-IN", {
+//                           day: "2-digit",
+//                           month: "short",
+//                           year: "numeric",
+//                           hour: "2-digit",
+//                           minute: "2-digit",
+//                         })}
+//                       </span>
+//                     </p>
+//                   )}
+//                   {selectedOrder.deliveredDate && (
+//                     <p className="flex items-start gap-2 text-sm">
+//                       <CheckCircle className="mt-0.5 h-4 w-4 text-gray-400" />
+//                       <span>
+//                         Delivered:{" "}
+//                         {new Date(selectedOrder.deliveredDate).toLocaleString("en-IN", {
+//                           day: "2-digit",
+//                           month: "short",
+//                           year: "numeric",
+//                           hour: "2-digit",
+//                           minute: "2-digit",
+//                         })}
+//                       </span>
+//                     </p>
+//                   )}
+//                   <p className="flex items-start gap-2 text-sm">
+//                     <CreditCard className="mt-0.5 h-4 w-4 text-gray-400" />
+//                     <span>
+//                       Payment:{" "}
+//                       <span
+//                         className={`font-medium ${
+//                           selectedOrder.paymentStatus === "paid"
+//                             ? "text-green-600"
+//                             : selectedOrder.paymentStatus === "refunded"
+//                             ? "text-orange-600"
+//                             : "text-red-600"
+//                         }`}
+//                       >
+//                         {selectedOrder.paymentStatus.charAt(0).toUpperCase() +
+//                           selectedOrder.paymentStatus.slice(1)}
+//                       </span>{" "}
+//                       via {selectedOrder.paymentMethod.replace("_", " ")}
+//                     </span>
+//                   </p>
+//                 </div>
+//               </div>
+//             </div>
+
+//             {/* Order Items */}
+//             <div className="mt-6 rounded-xl border border-gray-200 bg-white/50 p-4 backdrop-blur-sm">
+//               <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
+//                 <Package className="h-4 w-4 text-blue-600" />
+//                 Order Items ({selectedOrder.items.length})
+//               </h3>
+//               <div className="overflow-x-auto">
+//                 <table className="w-full text-sm">
+//                   <thead className="border-b border-gray-200">
+//                     <tr>
+//                       <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">#</th>
+//                       <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Product</th>
+//                       <th className="px-3 py-2 text-right text-xs font-medium text-gray-500">Qty</th>
+//                       <th className="px-3 py-2 text-right text-xs font-medium text-gray-500">Price</th>
+//                       <th className="px-3 py-2 text-right text-xs font-medium text-gray-500">Total</th>
+//                     </tr>
+//                   </thead>
+//                   <tbody>
+//                     {selectedOrder.items.map((item, index) => (
+//                       <tr key={item.id} className="border-b border-gray-100 last:border-0">
+//                         <td className="px-3 py-2 text-xs text-gray-500">{index + 1}</td>
+//                         <td className="px-3 py-2 text-sm text-gray-800">{item.productName}</td>
+//                         <td className="px-3 py-2 text-right text-sm text-gray-700">{item.quantity}</td>
+//                         <td className="px-3 py-2 text-right text-sm text-gray-700">
+//                           ₹{item.price.toLocaleString()}
+//                         </td>
+//                         <td className="px-3 py-2 text-right text-sm font-medium text-gray-800">
+//                           ₹{item.total.toLocaleString()}
+//                         </td>
+//                       </tr>
+//                     ))}
+//                   </tbody>
+//                   <tfoot className="border-t-2 border-gray-200">
+//                     <tr>
+//                       <td colSpan={4} className="px-3 py-2 text-right text-sm font-medium text-gray-600">
+//                         Subtotal
+//                       </td>
+//                       <td className="px-3 py-2 text-right text-sm text-gray-800">
+//                         ₹{selectedOrder.subtotal.toLocaleString()}
+//                       </td>
+//                     </tr>
+//                     <tr>
+//                       <td colSpan={4} className="px-3 py-2 text-right text-sm text-gray-600">
+//                         Tax
+//                       </td>
+//                       <td className="px-3 py-2 text-right text-sm text-gray-800">
+//                         ₹{selectedOrder.tax.toLocaleString()}
+//                       </td>
+//                     </tr>
+//                     <tr>
+//                       <td colSpan={4} className="px-3 py-2 text-right text-sm text-gray-600">
+//                         Shipping
+//                       </td>
+//                       <td className="px-3 py-2 text-right text-sm text-gray-800">
+//                         ₹{selectedOrder.shipping.toLocaleString()}
+//                       </td>
+//                     </tr>
+//                     {selectedOrder.discount > 0 && (
+//                       <tr>
+//                         <td colSpan={4} className="px-3 py-2 text-right text-sm text-green-600">
+//                           Discount
+//                         </td>
+//                         <td className="px-3 py-2 text-right text-sm text-green-600">
+//                           -₹{selectedOrder.discount.toLocaleString()}
+//                         </td>
+//                       </tr>
+//                     )}
+//                     <tr className="border-t-2 border-gray-300">
+//                       <td colSpan={4} className="px-3 py-3 text-right text-base font-bold text-gray-800">
+//                         Total
+//                       </td>
+//                       <td className="px-3 py-3 text-right text-base font-bold text-blue-600">
+//                         ₹{selectedOrder.total.toLocaleString()}
+//                       </td>
+//                     </tr>
+//                   </tfoot>
+//                 </table>
+//               </div>
+//             </div>
+
+//             {/* Notes */}
+//             {selectedOrder.notes && (
+//               <div className="mt-4 rounded-xl border border-gray-200 bg-yellow-50/50 p-4 backdrop-blur-sm">
+//                 <p className="flex items-start gap-2 text-sm">
+//                   <FileText className="mt-0.5 h-4 w-4 text-yellow-600" />
+//                   <span className="text-gray-700">{selectedOrder.notes}</span>
+//                 </p>
+//               </div>
+//             )}
+
+//             {/* Modal Actions */}
+//             <div className="mt-6 flex flex-col gap-3 border-t border-gray-200 pt-4 sm:flex-row sm:justify-end">
+//               <button
+//                 onClick={handleCloseModal}
+//                 className="flex items-center justify-center gap-2 rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-200"
+//               >
+//                 Close
+//               </button>
+//               <button className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 px-4 py-2 text-sm font-medium text-white shadow-lg transition hover:scale-105 hover:shadow-xl">
+//                 <Printer className="h-4 w-4" />
+//                 Print Invoice
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   )
+// }
+"use client"
+
+import React, { useState, useMemo } from "react"
 import {
-  Search,
-  Trash2,
-  User,
-  Package,
-  Warehouse,
-  Truck,
-  CreditCard,
-  Calculator,
-  CheckCircle,
-  AlertCircle,
-  Building2,
   ShoppingBag,
-  RefreshCw,
+  Search,
+  Filter,
+  Calendar,
+  Clock,
+  ChevronDown,
+  ChevronUp,
+  Eye,
   Printer,
-  Store,
-} from "lucide-react";
+  Download,
+  X,
+  Loader2,
+  AlertCircle,
+  CheckCircle,
+  XCircle,
+  Package,
+  Truck,
+  Home,
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  DollarSign,
+  Tag,
+  FileText,
+  CreditCard,
+  ArrowUpRight,
+  ArrowDownRight,
+  MoreVertical,
+  ChevronLeft,
+  ChevronRight,
+  Check,
+  ThumbsUp,
+  ThumbsDown,
+} from "lucide-react"
+import { useRouter } from "next/navigation"
 
 // ============================================================
 // TYPES
 // ============================================================
-interface Customer {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  previousDue: number;
-}
-
-interface Product {
-  id: string;
-  name: string;
-  sku: string;
-  price: number;
-  stock: number;
-}
-
 interface OrderItem {
-  productId: string;
-  productName: string;
-  sku: string;
-  quantity: number;
-  sellingPrice: number;
-  commission?: number;
+  id: string
+  productName: string
+  quantity: number
+  price: number
+  total: number
+  image?: string
 }
 
-interface Dealer {
-  id: string;
-  name: string;
-  location: string;
-  contact: string;
+interface Order {
+  id: string
+  orderNumber: string
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  customerAddress: string
+  items: OrderItem[]
+  subtotal: number
+  tax: number
+  shipping: number
+  discount: number
+  total: number
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled"
+  paymentStatus: "paid" | "unpaid" | "refunded"
+  paymentMethod: "credit_card" | "debit_card" | "cash" | "bank_transfer"
+  orderDate: string
+  shippedDate?: string
+  deliveredDate?: string
+  notes?: string
 }
 
-type DeliverySource = "dealer" | "warehouse";
+// ============================================================
+// MOCK DATA
+// ============================================================
+const MOCK_ORDERS: Order[] = [
+  {
+    id: "ord-001",
+    orderNumber: "ORD-2026-001",
+    customerName: "Rajesh Kumar",
+    customerEmail: "rajesh@email.com",
+    customerPhone: "+91 98765 43210",
+    customerAddress: "123, BKC Complex, Bandra, Mumbai - 400051",
+    items: [
+      {
+        id: "item-1",
+        productName: "Cement Bag - 50kg (Birla)",
+        quantity: 10,
+        price: 350,
+        total: 3500,
+      },
+      {
+        id: "item-2",
+        productName: "TMT Steel Rod - 12mm (SAIL)",
+        quantity: 25,
+        price: 620,
+        total: 15500,
+      },
+    ],
+    subtotal: 19000,
+    tax: 1800,
+    shipping: 500,
+    discount: 1000,
+    total: 20300,
+    status: "delivered",
+    paymentStatus: "paid",
+    paymentMethod: "credit_card",
+    orderDate: "2026-01-15T10:30:00",
+    shippedDate: "2026-01-16T14:20:00",
+    deliveredDate: "2026-01-18T11:45:00",
+    notes: "Handle with care - fragile items",
+  },
+  {
+    id: "ord-002",
+    orderNumber: "ORD-2026-002",
+    customerName: "Priya Sharma",
+    customerEmail: "priya@email.com",
+    customerPhone: "+91 87654 32109",
+    customerAddress: "456, Park Street, Kolkata - 700016",
+    items: [
+      {
+        id: "item-3",
+        productName: "Paint - Premium Emulsion (Asian Paints)",
+        quantity: 15,
+        price: 850,
+        total: 12750,
+      },
+    ],
+    subtotal: 12750,
+    tax: 1200,
+    shipping: 300,
+    discount: 500,
+    total: 13750,
+    status: "shipped",
+    paymentStatus: "paid",
+    paymentMethod: "debit_card",
+    orderDate: "2026-02-10T09:15:00",
+    shippedDate: "2026-02-12T16:40:00",
+  },
+  {
+    id: "ord-003",
+    orderNumber: "ORD-2026-003",
+    customerName: "Amit Singh",
+    customerEmail: "amit@email.com",
+    customerPhone: "+91 76543 21098",
+    customerAddress: "789, Connaught Place, Delhi - 110001",
+    items: [
+      {
+        id: "item-4",
+        productName: "Bricks - Red Clay (Pack of 100)",
+        quantity: 50,
+        price: 280,
+        total: 14000,
+      },
+      {
+        id: "item-5",
+        productName: "Sand - River Sand (Per Ton)",
+        quantity: 5,
+        price: 1200,
+        total: 6000,
+      },
+    ],
+    subtotal: 20000,
+    tax: 1900,
+    shipping: 800,
+    discount: 0,
+    total: 22700,
+    status: "pending",
+    paymentStatus: "unpaid",
+    paymentMethod: "cash",
+    orderDate: "2026-03-05T11:20:00",
+  },
+  {
+    id: "ord-004",
+    orderNumber: "ORD-2026-004",
+    customerName: "Sneha Reddy",
+    customerEmail: "sneha@email.com",
+    customerPhone: "+91 65432 10987",
+    customerAddress: "101, Anna Nagar, Chennai - 600040",
+    items: [
+      {
+        id: "item-6",
+        productName: "Waterproofing Chemical - Liquid (Dr. Fixit)",
+        quantity: 8,
+        price: 450,
+        total: 3600,
+      },
+    ],
+    subtotal: 3600,
+    tax: 340,
+    shipping: 200,
+    discount: 200,
+    total: 3940,
+    status: "processing",
+    paymentStatus: "paid",
+    paymentMethod: "bank_transfer",
+    orderDate: "2026-03-12T08:45:00",
+  },
+  {
+    id: "ord-005",
+    orderNumber: "ORD-2026-005",
+    customerName: "Vikram Patel",
+    customerEmail: "vikram@email.com",
+    customerPhone: "+91 54321 09876",
+    customerAddress: "202, MG Road, Bangalore - 560001",
+    items: [
+      {
+        id: "item-7",
+        productName: "Wood Polish - Teak Finish (Melamine)",
+        quantity: 12,
+        price: 320,
+        total: 3840,
+      },
+      {
+        id: "item-8",
+        productName: "Laminates - Premium Grade (Greenlam)",
+        quantity: 20,
+        price: 450,
+        total: 9000,
+      },
+    ],
+    subtotal: 12840,
+    tax: 1200,
+    shipping: 400,
+    discount: 800,
+    total: 13640,
+    status: "cancelled",
+    paymentStatus: "refunded",
+    paymentMethod: "credit_card",
+    orderDate: "2026-03-20T14:10:00",
+    notes: "Customer cancelled due to delivery delay",
+  },
+  {
+    id: "ord-006",
+    orderNumber: "ORD-2026-006",
+    customerName: "Ananya Gupta",
+    customerEmail: "ananya@email.com",
+    customerPhone: "+91 43210 98765",
+    customerAddress: "303, Jubilee Hills, Hyderabad - 500033",
+    items: [
+      {
+        id: "item-9",
+        productName: "Ceramic Tiles - Vitrified (Kajaria)",
+        quantity: 30,
+        price: 580,
+        total: 17400,
+      },
+    ],
+    subtotal: 17400,
+    tax: 1650,
+    shipping: 600,
+    discount: 1200,
+    total: 18450,
+    status: "delivered",
+    paymentStatus: "paid",
+    paymentMethod: "debit_card",
+    orderDate: "2026-04-02T13:25:00",
+    shippedDate: "2026-04-03T10:15:00",
+    deliveredDate: "2026-04-05T09:30:00",
+  },
+]
 
 // ============================================================
-// MOCK DATA – replace with your API calls
+// STATUS BADGE COMPONENT
 // ============================================================
-const MOCK_CUSTOMERS: Customer[] = [
-  { id: "c1", name: "Green Valley Constructions", email: "info@gvc.com", phone: "+91 98765 43210", previousDue: 0 },
-  { id: "c2", name: "Apex Builders", email: "accounts@apex.in", phone: "+91 87654 32109", previousDue: 1250.50 },
-  { id: "c3", name: "SRBS Retail Store – Mumbai", email: "mumbai@srbs.com", phone: "+91 76543 21098", previousDue: 450.00 },
-  { id: "c4", name: "Kolkata Infrastructure Ltd", email: "procurement@kil.net", phone: "+91 65432 10987", previousDue: 3200.75 },
-];
+const StatusBadge: React.FC<{ status: Order["status"] }> = ({ status }) => {
+  const config = {
+    pending: { color: "bg-yellow-100 text-yellow-800", icon: Clock },
+    processing: { color: "bg-blue-100 text-blue-800", icon: Package },
+    shipped: { color: "bg-purple-100 text-purple-800", icon: Truck },
+    delivered: { color: "bg-green-100 text-green-800", icon: CheckCircle },
+    cancelled: { color: "bg-red-100 text-red-800", icon: XCircle },
+  }
 
-const MOCK_PRODUCTS: Product[] = [
-  { id: "p1", name: "SRBS SuperPlast PC-300", sku: "ADM-1001", price: 1250.00, stock: 45 },
-  { id: "p2", name: "SRBS Waterproof Coating – WPC", sku: "PNT-2002", price: 850.00, stock: 28 },
-  { id: "p3", name: "SRBS Epoxy Floor Paint (Grey)", sku: "PNT-3003", price: 2200.00, stock: 12 },
-  { id: "p4", name: "SRBS Concrete Admixture – A40", sku: "ADM-4004", price: 980.00, stock: 33 },
-  { id: "p5", name: "SRBS Acrylic Emulsion (White)", sku: "PNT-5005", price: 640.00, stock: 19 },
-  { id: "p6", name: "SRBS Anti‑Corrosive Primer", sku: "PNT-6006", price: 1120.00, stock: 8 },
-];
-
-const MOCK_DEALERS: Dealer[] = [
-  { id: "d1", name: "Mumbai Construction Supplies", location: "Mumbai, Maharashtra", contact: "+91 98765 43210" },
-  { id: "d2", name: "Delhi Building Materials", location: "Delhi, NCR", contact: "+91 87654 32109" },
-  { id: "d3", name: "Chennai Hardware Store", location: "Chennai, Tamil Nadu", contact: "+91 76543 21098" },
-  { id: "d4", name: "Kolkata Paint House", location: "Kolkata, West Bengal", contact: "+91 65432 10987" },
-];
+  const { color, icon: Icon } = config[status]
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${color}`}>
+      <Icon className="h-3 w-3" />
+      {status.charAt(0).toUpperCase() + status.slice(1)}
+    </span>
+  )
+}
 
 // ============================================================
 // MAIN COMPONENT
 // ============================================================
-export default function NewOrderPage() {
+export default function OrderHistoryPage() {
+  const router = useRouter()
+  
   // ---------- State ----------
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
-  const [customerSearch, setCustomerSearch] = useState("");
-  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
+  const [orders, setOrders] = useState<Order[]>(MOCK_ORDERS)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const [productSearch, setProductSearch] = useState("");
-  const [showProductDropdown, setShowProductDropdown] = useState(false);
-  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
+  // Search and filters
+  const [searchTerm, setSearchTerm] = useState("")
+  const [statusFilter, setStatusFilter] = useState<Order["status"] | "all">("all")
+  const [paymentFilter, setPaymentFilter] = useState<Order["paymentStatus"] | "all">("all")
+  const [dateRange, setDateRange] = useState<"today" | "week" | "month" | "year" | "all">("all")
 
-  const [deliverySource, setDeliverySource] = useState<DeliverySource>("warehouse");
-  const [selectedDealer, setSelectedDealer] = useState<Dealer | null>(null);
-  const [dealerSearch, setDealerSearch] = useState("");
-  const [showDealerDropdown, setShowDealerDropdown] = useState(false);
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
 
-  const [paymentReceived, setPaymentReceived] = useState<number>(0);
-  const [paymentError, setPaymentError] = useState<string | null>(null);
-  const [orderNotes, setOrderNotes] = useState("");
+  // Selected order for detail view
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [actionLoading, setActionLoading] = useState(false)
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  // ---------- Derived ----------
+  const filteredOrders = useMemo(() => {
+    let result = orders
 
-  // ---------- Derived: filtered customers, products & dealers ----------
-  const filteredCustomers = useMemo(() => {
-    if (!customerSearch.trim()) return MOCK_CUSTOMERS;
-    const q = customerSearch.toLowerCase();
-    return MOCK_CUSTOMERS.filter(
-      (c) =>
-        c.name.toLowerCase().includes(q) ||
-        c.email.toLowerCase().includes(q) ||
-        c.phone.includes(q)
-    );
-  }, [customerSearch]);
-
-  const filteredProducts = useMemo(() => {
-    if (!productSearch.trim()) return MOCK_PRODUCTS;
-    const q = productSearch.toLowerCase();
-    return MOCK_PRODUCTS.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.sku.toLowerCase().includes(q)
-    );
-  }, [productSearch]);
-
-  const filteredDealers = useMemo(() => {
-    if (!dealerSearch.trim()) return MOCK_DEALERS;
-    const q = dealerSearch.toLowerCase();
-    return MOCK_DEALERS.filter(
-      (d) =>
-        d.name.toLowerCase().includes(q) ||
-        d.location.toLowerCase().includes(q) ||
-        d.contact.includes(q)
-    );
-  }, [dealerSearch]);
-
-  // ---------- Derived: totals ----------
-  const subtotal = useMemo(() => {
-    return orderItems.reduce((sum, item) => sum + item.sellingPrice * item.quantity, 0);
-  }, [orderItems]);
-
-  const totalCommission = useMemo(() => {
-    return orderItems.reduce((sum, item) => sum + (item.commission || 0), 0);
-  }, [orderItems]);
-
-  const previousDue = selectedCustomer?.previousDue || 0;
-
-  const totalPayable = useMemo(() => {
-    return subtotal + totalCommission + previousDue;
-  }, [subtotal, totalCommission, previousDue]);
-
-  const dueAmount = useMemo(() => {
-    return Math.max(0, totalPayable - paymentReceived);
-  }, [totalPayable, paymentReceived]);
-
-  // Validate payment whenever total payable changes
-  useEffect(() => {
-    if (paymentReceived > totalPayable) {
-      setPaymentError("Payment cannot exceed total payable");
-    } else {
-      setPaymentError(null);
+    // Search
+    if (searchTerm.trim()) {
+      const q = searchTerm.toLowerCase()
+      result = result.filter(
+        (o) =>
+          o.orderNumber.toLowerCase().includes(q) ||
+          o.customerName.toLowerCase().includes(q) ||
+          o.customerEmail.toLowerCase().includes(q) ||
+          o.customerPhone.includes(q)
+      )
     }
-  }, [totalPayable, paymentReceived]);
 
-  // Reset dealer when switching to warehouse
-  useEffect(() => {
-    if (deliverySource === "warehouse") {
-      setSelectedDealer(null);
-      setDealerSearch("");
+    // Status filter
+    if (statusFilter !== "all") {
+      result = result.filter((o) => o.status === statusFilter)
     }
-  }, [deliverySource]);
+
+    // Payment filter
+    if (paymentFilter !== "all") {
+      result = result.filter((o) => o.paymentStatus === paymentFilter)
+    }
+
+    // Date range filter
+    if (dateRange !== "all") {
+      const now = new Date()
+      let cutoffDate = new Date()
+
+      switch (dateRange) {
+        case "today":
+          cutoffDate.setHours(0, 0, 0, 0)
+          break
+        case "week":
+          cutoffDate.setDate(now.getDate() - 7)
+          break
+        case "month":
+          cutoffDate.setMonth(now.getMonth() - 1)
+          break
+        case "year":
+          cutoffDate.setFullYear(now.getFullYear() - 1)
+          break
+      }
+
+      result = result.filter((o) => new Date(o.orderDate) >= cutoffDate)
+    }
+
+    // Sort by date (newest first)
+    return result.sort((a, b) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime())
+  }, [orders, searchTerm, statusFilter, paymentFilter, dateRange])
+
+  // Pagination
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage)
+  const paginatedOrders = filteredOrders.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+
+  // Stats
+  const stats = useMemo(() => {
+    const total = orders.length
+    const pending = orders.filter((o) => o.status === "pending").length
+    const shipped = orders.filter((o) => o.status === "shipped").length
+    const delivered = orders.filter((o) => o.status === "delivered").length
+    const cancelled = orders.filter((o) => o.status === "cancelled").length
+    const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0)
+
+    return { total, pending, shipped, delivered, cancelled, totalRevenue }
+  }, [orders])
 
   // ---------- Handlers ----------
-  const handleSelectCustomer = (customer: Customer) => {
-    setSelectedCustomer(customer);
-    setCustomerSearch(customer.name);
-    setShowCustomerDropdown(false);
-    setPaymentReceived(0);
-    setPaymentError(null);
-  };
+  const handleViewOrder = (order: Order) => {
+    setSelectedOrder(order)
+    setShowDetailModal(true)
+  }
 
-  const handleSelectDealer = (dealer: Dealer) => {
-    setSelectedDealer(dealer);
-    setDealerSearch(dealer.name);
-    setShowDealerDropdown(false);
-  };
+  const handleCloseModal = () => {
+    setShowDetailModal(false)
+    setSelectedOrder(null)
+    setActionLoading(false)
+  }
 
-  const handleAddProduct = (product: Product) => {
-    const existing = orderItems.find((item) => item.productId === product.id);
-    if (existing) {
-      setOrderItems((prev) =>
-        prev.map((item) =>
-          item.productId === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      );
-    } else {
-      setOrderItems((prev) => [
-        ...prev,
-        {
-          productId: product.id,
-          productName: product.name,
-          sku: product.sku,
-          quantity: 1,
-          sellingPrice: product.price,
-          commission: 0,
-        },
-      ]);
-    }
-    setProductSearch("");
-    setShowProductDropdown(false);
-  };
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
-  const handleRemoveItem = (productId: string) => {
-    setOrderItems((prev) => prev.filter((item) => item.productId !== productId));
-  };
-
-  const updateItemField = (
-    productId: string,
-    field: keyof OrderItem,
-    value: number
-  ) => {
-    setOrderItems((prev) =>
-      prev.map((item) =>
-        item.productId === productId ? { ...item, [field]: value } : item
+  // ---------- Accept/Reject Handlers ----------
+  const handleAcceptOrder = async () => {
+    if (!selectedOrder) return
+    
+    setActionLoading(true)
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    
+    // Update order status to processing
+    setOrders((prev) =>
+      prev.map((o) =>
+        o.id === selectedOrder.id
+          ? { ...o, status: "processing" as Order["status"] }
+          : o
       )
-    );
-  };
+    )
+    
+    // Update selected order
+    setSelectedOrder((prev) =>
+      prev ? { ...prev, status: "processing" as Order["status"] } : null
+    )
+    
+    setActionLoading(false)
+    
+    // Show success notification (you can replace with toast)
+    alert(`Order ${selectedOrder.orderNumber} has been accepted and is now processing.`)
+  }
 
-  const handlePaymentChange = (value: string) => {
-    const num = parseFloat(value);
-    if (isNaN(num) || num < 0) {
-      setPaymentReceived(0);
-      setPaymentError("Please enter a valid amount");
-      return;
-    }
-    setPaymentReceived(num);
-    if (num > totalPayable) {
-      setPaymentError("Payment cannot exceed total payable");
-    } else {
-      setPaymentError(null);
-    }
-  };
+  const handleRejectOrder = async () => {
+    if (!selectedOrder) return
+    
+    setActionLoading(true)
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    
+    // Update order status to cancelled
+    setOrders((prev) =>
+      prev.map((o) =>
+        o.id === selectedOrder.id
+          ? { ...o, status: "cancelled" as Order["status"] }
+          : o
+      )
+    )
+    
+    // Update selected order
+    setSelectedOrder((prev) =>
+      prev ? { ...prev, status: "cancelled" as Order["status"] } : null
+    )
+    
+    setActionLoading(false)
+    
+    // Show success notification (you can replace with toast)
+    alert(`Order ${selectedOrder.orderNumber} has been rejected.`)
+  }
 
-  const clearOrder = () => {
-    setOrderItems([]);
-    setSelectedCustomer(null);
-    setCustomerSearch("");
-    setPaymentReceived(0);
-    setOrderNotes("");
-    setSelectedDealer(null);
-    setDealerSearch("");
-    setSubmitError(null);
-    setSubmitSuccess(false);
-  };
-
-  const handleSubmit = async () => {
-    // Validation
-    if (!selectedCustomer) {
-      setSubmitError("Please select a customer");
-      return;
-    }
-    if (orderItems.length === 0) {
-      setSubmitError("Please add at least one product");
-      return;
-    }
-    if (deliverySource === "dealer" && !selectedDealer) {
-      setSubmitError("Please select a dealer");
-      return;
-    }
-    if (paymentReceived < 0) {
-      setSubmitError("Payment cannot be negative");
-      return;
-    }
-    if (paymentReceived > totalPayable) {
-      setSubmitError("Payment exceeds total payable amount");
-      return;
-    }
-
-    setIsSubmitting(true);
-    setSubmitError(null);
-
-    // Simulate API call – replace with your actual fetch
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    // Success
-    setIsSubmitting(false);
-    setSubmitSuccess(true);
-    setTimeout(() => {
-      setSubmitSuccess(false);
-    }, 4000);
-  };
-
-  // ---------- Render dropdowns ----------
-  const renderCustomerDropdown = () => {
-    if (!showCustomerDropdown) return null;
-    if (filteredCustomers.length === 0) {
-      return (
-        <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 text-center text-gray-500">
-          <AlertCircle className="inline mr-2 h-4 w-4" />
-          No customers found
-        </div>
-      );
-    }
+  // ---------- Loading / Error ----------
+  if (loading) {
     return (
-      <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-60 overflow-y-auto">
-        {filteredCustomers.map((customer) => (
-          <button
-            key={customer.id}
-            className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-center justify-between border-b border-gray-100 last:border-0"
-            onClick={() => handleSelectCustomer(customer)}
-          >
-            <div>
-              <div className="font-medium text-gray-800">{customer.name}</div>
-              <div className="text-sm text-gray-500">
-                {customer.email} · {customer.phone}
-              </div>
-            </div>
-            <div
-              className={`text-sm font-semibold px-3 py-1 rounded-full ${
-                customer.previousDue > 0
-                  ? "bg-amber-100 text-amber-700"
-                  : "bg-green-100 text-green-700"
-              }`}
-            >
-              Due: ৳{customer.previousDue.toFixed(2)}
-            </div>
-          </button>
-        ))}
-      </div>
-    );
-  };
-
-  const renderProductDropdown = () => {
-    if (!showProductDropdown) return null;
-    if (filteredProducts.length === 0) {
-      return (
-        <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 text-center text-gray-500">
-          <AlertCircle className="inline mr-2 h-4 w-4" />
-          No products found
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="text-center">
+          <Loader2 className="mx-auto mb-4 h-12 w-12 animate-spin text-blue-600" />
+          <p className="text-gray-600">Loading orders...</p>
         </div>
-      );
-    }
-    return (
-      <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-60 overflow-y-auto">
-        {filteredProducts.map((product) => (
-          <button
-            key={product.id}
-            className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-center justify-between border-b border-gray-100 last:border-0"
-            onClick={() => handleAddProduct(product)}
-          >
-            <div>
-              <div className="font-medium text-gray-800">{product.name}</div>
-              <div className="text-sm text-gray-500">SKU: {product.sku}</div>
-            </div>
-            <div className="text-right">
-              <div className="font-semibold text-gray-800">
-                ৳{product.price.toFixed(2)}
-              </div>
-              <div className="text-xs text-gray-500">{product.stock} in stock</div>
-            </div>
-          </button>
-        ))}
       </div>
-    );
-  };
+    )
+  }
 
-  const renderDealerDropdown = () => {
-    if (!showDealerDropdown) return null;
-    if (filteredDealers.length === 0) {
-      return (
-        <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 text-center text-gray-500">
-          <AlertCircle className="inline mr-2 h-4 w-4" />
-          No dealers found
-        </div>
-      );
-    }
+  if (error) {
     return (
-      <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-60 overflow-y-auto">
-        {filteredDealers.map((dealer) => (
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+        <div className="max-w-md rounded-2xl border border-red-200 bg-white/80 p-8 text-center shadow-xl backdrop-blur-md">
+          <AlertCircle className="mx-auto mb-4 h-14 w-14 text-red-500" />
+          <h2 className="text-xl font-bold text-red-700">Error</h2>
+          <p className="mt-2 text-red-600">{error}</p>
           <button
-            key={dealer.id}
-            className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-center justify-between border-b border-gray-100 last:border-0"
-            onClick={() => handleSelectDealer(dealer)}
+            onClick={() => window.location.reload()}
+            className="mt-6 rounded-xl bg-gradient-to-r from-red-500 to-red-600 px-6 py-2 text-white transition hover:shadow-lg"
           >
-            <div>
-              <div className="font-medium text-gray-800">{dealer.name}</div>
-              <div className="text-sm text-gray-500">
-                {dealer.location} · {dealer.contact}
-              </div>
-            </div>
-            <Store className="h-4 w-4 text-gray-400" />
+            Retry
           </button>
-        ))}
+        </div>
       </div>
-    );
-  };
+    )
+  }
 
   // ============================================================
   // RENDER
   // ============================================================
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100 p-3 sm:p-4 md:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* ---------- HEADER with SRBS branding ---------- */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6 md:mb-8 bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-md border border-gray-200">
-          <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-            <div className="bg-blue-700 text-white p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl shadow-md flex-shrink-0">
-              <Building2 className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-6 lg:p-8">
+      {/* Background decorations */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-gradient-to-bl from-blue-200/20 to-indigo-200/20 blur-3xl" />
+        <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-gradient-to-tr from-purple-200/20 to-pink-200/20 blur-3xl" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-7xl">
+        {/* Header */}
+        <div className="mb-6 rounded-2xl border border-white/40 bg-white/30 p-6 shadow-xl backdrop-blur-xl md:rounded-3xl md:p-8">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-4">
+              <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-3 text-white shadow-lg">
+                <ShoppingBag className="h-7 w-7 md:h-8 md:w-8" />
+              </div>
+              <div>
+                <h1 className="bg-gradient-to-r from-blue-700 to-indigo-800 bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
+                  Seller Order Management
+                </h1>
+                <p className="text-sm text-gray-600">Track and manage all customer orders</p>
+              </div>
             </div>
-            <div className="min-w-0">
-              <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-blue-800 truncate">SRBS Admixture & Paint</h1>
-              <p className="text-xs sm:text-sm text-gray-500 flex flex-wrap items-center gap-1 sm:gap-2">
-                <span>New Order</span>
-                <span className="w-0.5 h-0.5 sm:w-1 sm:h-1 bg-gray-300 rounded-full"></span>
-                <span>{new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</span>
-              </p>
+            <div className="flex flex-wrap items-center gap-3">
+            
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 md:gap-3">
-            {submitSuccess && (
-              <span className="flex items-center gap-1 sm:gap-2 text-green-600 bg-green-50 px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg border border-green-200 animate-pulse text-xs sm:text-sm">
-                <CheckCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5" />
-                <span className="hidden xs:inline">Order submitted!</span>
-                <span className="xs:hidden">Submitted!</span>
-              </span>
-            )}
-            <button
-              onClick={clearOrder}
-              className="text-xs sm:text-sm text-gray-500 hover:text-gray-700 flex items-center gap-0.5 sm:gap-1 bg-gray-100 px-2 sm:px-3 py-1 sm:py-1.5 md:py-2 rounded-lg hover:bg-gray-200 transition"
-            >
-              <RefreshCw className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
-              <span className="hidden xs:inline">Reset</span>
-            </button>
-            <button
-              onClick={() => window.print()}
-              className="text-xs sm:text-sm text-gray-500 hover:text-gray-700 flex items-center gap-0.5 sm:gap-1 bg-gray-100 px-2 sm:px-3 py-1 sm:py-1.5 md:py-2 rounded-lg hover:bg-gray-200 transition"
-            >
-              <Printer className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
-              <span className="hidden xs:inline">Print</span>
-            </button>
+
+          {/* Stats */}
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            <div className="rounded-xl bg-white/60 p-3 backdrop-blur-sm">
+              <p className="text-xs text-gray-500">Total Orders</p>
+              <p className="text-lg font-bold text-gray-800">{stats.total}</p>
+            </div>
+            <div className="rounded-xl bg-yellow-50/60 p-3 backdrop-blur-sm">
+              <p className="text-xs text-yellow-600">Pending</p>
+              <p className="text-lg font-bold text-yellow-700">{stats.pending}</p>
+            </div>
+            <div className="rounded-xl bg-green-50/60 p-3 backdrop-blur-sm">
+              <p className="text-xs text-green-600">Delivered</p>
+              <p className="text-lg font-bold text-green-700">{stats.delivered}</p>
+            </div>
+            <div className="rounded-xl bg-red-50/60 p-3 backdrop-blur-sm">
+              <p className="text-xs text-red-600">Cancelled</p>
+              <p className="text-lg font-bold text-red-700">{stats.cancelled}</p>
+            </div>
+            <div className="rounded-xl bg-blue-50/60 p-3 backdrop-blur-sm">
+              <p className="text-xs text-blue-600">Revenue</p>
+              <p className="text-lg font-bold text-blue-700">৳{stats.totalRevenue.toLocaleString()}</p>
+            </div>
           </div>
         </div>
 
-        {/* ---------- MAIN GRID ---------- */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
-          {/* Left Column: Customer + Products */}
-          <div className="lg:col-span-2 space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
-            {/* --- Customer Selection --- */}
-            <div className="bg-white rounded-xl sm:rounded-2xl shadow-md border border-gray-200 p-4 sm:p-5 md:p-6 transition hover:shadow-lg">
-              <h2 className="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-                <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600" />
-                Select Customer
-              </h2>
-              <div className="relative">
-                <div className="flex items-center border-2 border-gray-300 rounded-lg sm:rounded-xl bg-white focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition">
-                  <Search className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 ml-2 sm:ml-3" />
-                  <input
-                    type="text"
-                    placeholder="Search customer by name, email or phone..."
-                    className="w-full px-2 sm:px-3 py-2 sm:py-2.5 md:py-3 outline-none bg-transparent text-gray-700 text-sm sm:text-base rounded-lg sm:rounded-xl"
-                    value={customerSearch}
-                    onChange={(e) => {
-                      setCustomerSearch(e.target.value);
-                      setShowCustomerDropdown(true);
-                    }}
-                    onFocus={() => setShowCustomerDropdown(true)}
-                    onBlur={() => setTimeout(() => setShowCustomerDropdown(false), 200)}
-                  />
-                </div>
-                {renderCustomerDropdown()}
-              </div>
-              {selectedCustomer && (
-                <div className="mt-3 sm:mt-4 flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 text-xs sm:text-sm bg-blue-50 p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl border border-blue-100">
-                  <span className="font-medium text-gray-800 truncate max-w-[100px] sm:max-w-none">{selectedCustomer.name}</span>
-                  <span className="text-gray-500 hidden xs:inline">|</span>
-                  <span className="text-gray-600 text-xs sm:text-sm truncate max-w-[100px] sm:max-w-none">{selectedCustomer.email}</span>
-                  <span className="text-gray-500 hidden sm:inline">|</span>
-                  <span
-                    className={`font-semibold text-xs sm:text-sm ${
-                      selectedCustomer.previousDue > 0 ? "text-amber-600" : "text-green-600"
-                    }`}
-                  >
-                    Due: ৳{selectedCustomer.previousDue.toFixed(2)}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* --- Product Search & Add --- */}
-            <div className="bg-white rounded-xl sm:rounded-2xl shadow-md border border-gray-200 p-4 sm:p-5 md:p-6 transition hover:shadow-lg">
-              <h2 className="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-                <Package className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600" />
-                Add Products
-              </h2>
-              <div className="relative">
-                <div className="flex items-center border-2 border-gray-300 rounded-lg sm:rounded-xl bg-white focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition">
-                  <Search className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 ml-2 sm:ml-3" />
-                  <input
-                    type="text"
-                    placeholder="Search product by name or SKU..."
-                    className="w-full px-2 sm:px-3 py-2 sm:py-2.5 md:py-3 outline-none bg-transparent text-gray-700 text-sm sm:text-base rounded-lg sm:rounded-xl"
-                    value={productSearch}
-                    onChange={(e) => {
-                      setProductSearch(e.target.value);
-                      setShowProductDropdown(true);
-                    }}
-                    onFocus={() => setShowProductDropdown(true)}
-                    onBlur={() => setTimeout(() => setShowProductDropdown(false), 200)}
-                  />
-                </div>
-                {renderProductDropdown()}
-              </div>
-            </div>
-
-            {/* --- Order Items List --- */}
-            <div className="bg-white rounded-xl sm:rounded-2xl shadow-md border border-gray-200 p-4 sm:p-5 md:p-6 transition hover:shadow-lg">
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-3 sm:mb-4">
-                <h2 className="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 sm:gap-2">
-                  <ShoppingBag className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600" />
-                  Order Items ({orderItems.length})
-                </h2>
-                {orderItems.length > 0 && (
-                  <button
-                    onClick={() => setOrderItems([])}
-                    className="text-xs sm:text-sm text-red-500 hover:text-red-700 font-medium flex items-center gap-0.5 sm:gap-1"
-                  >
-                    <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                    <span className="hidden xs:inline">Clear all</span>
-                  </button>
-                )}
-              </div>
-
-              {orderItems.length === 0 ? (
-                <div className="text-center py-6 sm:py-8 md:py-10 text-gray-400">
-                  <Package className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 mx-auto mb-2 opacity-30" />
-                  <p className="text-sm sm:text-base font-medium">No items added yet</p>
-                  <p className="text-xs sm:text-sm">Search and add products above</p>
-                </div>
-              ) : (
-                <div className="space-y-2 sm:space-y-3">
-                  {orderItems.map((item) => (
-                    <div
-                      key={item.productId}
-                      className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg sm:rounded-xl border border-gray-200 hover:border-blue-200 transition"
-                    >
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-gray-800 text-sm sm:text-base truncate">{item.productName}</div>
-                        <div className="text-xs sm:text-sm text-gray-500">SKU: {item.sku}</div>
-                      </div>
-
-                      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                        {/* Quantity */}
-                        <div className="flex items-center gap-0.5 sm:gap-1">
-                          <label className="text-[10px] sm:text-xs text-gray-500 font-medium">Qty</label>
-                          <input
-                            type="number"
-                            min="1"
-                            value={item.quantity}
-                            onChange={(e) =>
-                              updateItemField(
-                                item.productId,
-                                "quantity",
-                                Math.max(1, parseInt(e.target.value) || 1)
-                              )
-                            }
-                            className="w-12 sm:w-14 md:w-16 px-1 sm:px-2 py-1 border border-gray-300 rounded-lg text-center text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                          />
-                        </div>
-
-                        {/* Selling Price (editable) */}
-                        <div className="flex items-center gap-0.5 sm:gap-1">
-                          <label className="text-[10px] sm:text-xs text-gray-500 font-medium">Price</label>
-                          <input
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            value={item.sellingPrice}
-                            onChange={(e) =>
-                              updateItemField(
-                                item.productId,
-                                "sellingPrice",
-                                parseFloat(e.target.value) || 0
-                              )
-                            }
-                            className="w-16 sm:w-20 md:w-24 px-1 sm:px-2 py-1 border border-gray-300 rounded-lg text-center text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                          />
-                        </div>
-
-                        {/* Commission (optional) */}
-                        <div className="flex items-center gap-0.5 sm:gap-1">
-                          <label className="text-[10px] sm:text-xs text-gray-500 font-medium">Comm.</label>
-                          <input
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            placeholder="0"
-                            value={item.commission || 0}
-                            onChange={(e) =>
-                              updateItemField(
-                                item.productId,
-                                "commission",
-                                parseFloat(e.target.value) || 0
-                              )
-                            }
-                            className="w-14 sm:w-16 md:w-20 px-1 sm:px-2 py-1 border border-gray-300 rounded-lg text-center text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                          />
-                        </div>
-
-                        <button
-                          onClick={() => handleRemoveItem(item.productId)}
-                          className="text-red-400 hover:text-red-600 p-1 transition"
-                        >
-                          <Trash2 className="h-4 w-4 sm:h-5 sm:w-5" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* ---------- RIGHT COLUMN: Summary & Actions ---------- */}
-          <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
-            {/* --- Delivery Source --- */}
-            <div className="bg-white rounded-xl sm:rounded-2xl shadow-md border border-gray-200 p-4 sm:p-5 md:p-6 transition hover:shadow-lg">
-              <h2 className="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-                <Truck className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600" />
-                Delivery Source
-              </h2>
-              <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                <button
-                  onClick={() => setDeliverySource("dealer")}
-                  className={`flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 md:py-3 px-3 sm:px-4 rounded-lg sm:rounded-xl border-2 transition-all text-xs sm:text-sm ${
-                    deliverySource === "dealer"
-                      ? "border-blue-600 bg-blue-50 text-blue-700 shadow-sm"
-                      : "border-gray-200 hover:border-gray-300 text-gray-600"
-                  }`}
-                >
-                  <Store className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  <span className="hidden xs:inline">Dealer</span>
-                  <span className="xs:hidden">Dealer</span>
-                </button>
-                <button
-                  onClick={() => setDeliverySource("warehouse")}
-                  className={`flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 md:py-3 px-3 sm:px-4 rounded-lg sm:rounded-xl border-2 transition-all text-xs sm:text-sm ${
-                    deliverySource === "warehouse"
-                      ? "border-blue-600 bg-blue-50 text-blue-700 shadow-sm"
-                      : "border-gray-200 hover:border-gray-300 text-gray-600"
-                  }`}
-                >
-                  <Package className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  <span className="hidden xs:inline">Warehouse</span>
-                  <span className="xs:hidden">Ware</span>
-                </button>
-              </div>
-
-              {/* Dealer Selection - Show only when Dealer is selected */}
-              {deliverySource === "dealer" && (
-                <div className="mt-3 sm:mt-4">
-                  <label className="text-xs sm:text-sm font-medium text-gray-700 block mb-1.5 sm:mb-2">
-                    Select Dealer <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <div className="flex items-center border-2 border-gray-300 rounded-lg sm:rounded-xl bg-white focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition">
-                      <Search className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 ml-2 sm:ml-3" />
-                      <input
-                        type="text"
-                        placeholder="Search dealer..."
-                        className="w-full px-2 sm:px-3 py-2 sm:py-2.5 md:py-3 outline-none bg-transparent text-gray-700 text-sm sm:text-base rounded-lg sm:rounded-xl"
-                        value={dealerSearch}
-                        onChange={(e) => {
-                          setDealerSearch(e.target.value);
-                          setShowDealerDropdown(true);
-                        }}
-                        onFocus={() => setShowDealerDropdown(true)}
-                        onBlur={() => setTimeout(() => setShowDealerDropdown(false), 200)}
-                      />
-                    </div>
-                    {renderDealerDropdown()}
-                  </div>
-                  {selectedDealer && (
-                    <div className="mt-2 sm:mt-3 flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm bg-blue-50 p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl border border-blue-100">
-                      <Store className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600" />
-                      <span className="font-medium text-gray-800 truncate max-w-[80px] sm:max-w-none">{selectedDealer.name}</span>
-                      <span className="text-gray-500 hidden xs:inline">|</span>
-                      <span className="text-gray-600 text-xs sm:text-sm truncate max-w-[80px] sm:max-w-none">{selectedDealer.location}</span>
-                      <span className="text-gray-500 hidden sm:inline">|</span>
-                      <span className="text-gray-600 text-xs sm:text-sm">{selectedDealer.contact}</span>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* --- Payment & Due --- */}
-            <div className="bg-white rounded-xl sm:rounded-2xl shadow-md border border-gray-200 p-4 sm:p-5 md:p-6 transition hover:shadow-lg">
-              <h2 className="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-                <CreditCard className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600" />
-                Payment
-              </h2>
-
-              <div className="space-y-3 sm:space-y-4">
-                <div>
-                  <label className="text-xs sm:text-sm text-gray-600 block mb-1 font-medium">
-                    Receive Payment (৳)
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium text-xs sm:text-sm">৳</span>
-                    <input
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      value={paymentReceived || ""}
-                      onChange={(e) => handlePaymentChange(e.target.value)}
-                      placeholder="0.00"
-                      className="w-full pl-6 sm:pl-7 md:pl-8 pr-2 sm:pr-3 py-1.5 sm:py-2 border-2 border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm sm:text-base"
-                    />
-                  </div>
-                  {paymentError && (
-                    <p className="text-red-500 text-[10px] sm:text-sm mt-1 flex items-center gap-1">
-                      <AlertCircle className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                      {paymentError}
-                    </p>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-2 gap-1.5 sm:gap-2 text-[10px] sm:text-sm bg-gray-50 p-2 sm:p-3 rounded-lg sm:rounded-xl">
-                  <div className="text-gray-500">Subtotal</div>
-                  <div className="text-right font-medium">৳{subtotal.toFixed(2)}</div>
-
-                  <div className="text-gray-500">Commission</div>
-                  <div className="text-right font-medium">৳{totalCommission.toFixed(2)}</div>
-
-                  <div className="text-gray-500">Previous Due</div>
-                  <div className="text-right font-medium text-amber-600">
-                    ৳{previousDue.toFixed(2)}
-                  </div>
-
-                  <div className="text-gray-700 font-semibold border-t border-gray-200 pt-1.5 sm:pt-2">
-                    Total Payable
-                  </div>
-                  <div className="text-right font-bold text-gray-800 border-t border-gray-200 pt-1.5 sm:pt-2">
-                    ৳{totalPayable.toFixed(2)}
-                  </div>
-
-                  <div className="text-gray-700 font-semibold">Due</div>
-                  <div
-                    className={`text-right font-bold ${
-                      dueAmount === 0 ? "text-green-600" : "text-red-500"
-                    }`}
-                  >
-                    ৳{dueAmount.toFixed(2)}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* --- Notes (optional) --- */}
-            <div className="bg-white rounded-xl sm:rounded-2xl shadow-md border border-gray-200 p-4 sm:p-5 md:p-6 transition hover:shadow-lg">
-              <label className="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wider block mb-1.5 sm:mb-2">
-                Order Notes (optional)
-              </label>
-              <textarea
-                rows={2}
-                className="w-full p-2 sm:p-3 border-2 border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-xs sm:text-sm"
-                placeholder="Any special instructions..."
-                value={orderNotes}
-                onChange={(e) => setOrderNotes(e.target.value)}
+        {/* Filters */}
+        <div className="mb-6 rounded-2xl border border-white/50 bg-white/70 p-4 shadow-2xl backdrop-blur-xl md:p-6">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search by order number, customer name, email or phone..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full rounded-xl border-2 border-gray-200 bg-white/50 py-2 pl-10 pr-4 text-sm backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
               />
             </div>
-
-            {/* --- Submit --- */}
-            <button
-              onClick={handleSubmit}
-              disabled={isSubmitting || submitSuccess}
-              className={`w-full py-3 sm:py-3.5 md:py-4 rounded-lg sm:rounded-xl font-bold text-white text-sm sm:text-base md:text-lg transition-all flex items-center justify-center gap-2 shadow-md ${
-                isSubmitting || submitSuccess
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-700 hover:bg-blue-800 hover:shadow-lg transform hover:-translate-y-0.5"
-              }`}
-            >
-              {isSubmitting ? (
-                <>
-                  <span className="animate-spin">⏳</span> Submitting...
-                </>
-              ) : submitSuccess ? (
-                <>
-                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5" /> Submitted
-                </>
-              ) : (
-                <>
-                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5" /> Submit Order
-                </>
-              )}
-            </button>
-
-            {submitError && (
-              <div className="bg-red-50 text-red-700 p-3 sm:p-4 rounded-lg sm:rounded-xl text-xs sm:text-sm flex items-start gap-2 border border-red-200">
-                <AlertCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 mt-0.5 flex-shrink-0" />
-                <span>{submitError}</span>
-              </div>
-            )}
-
-            <div className="text-[10px] sm:text-xs text-gray-400 text-center flex items-center justify-center gap-1">
-              <Calculator className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-              Auto due calculated
+            <div className="flex flex-wrap gap-2">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value as any)}
+                className="rounded-xl border-2 border-gray-200 bg-white/50 px-3 py-2 text-sm backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+              >
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <button
+                onClick={() => {
+                  setSearchTerm("")
+                  setStatusFilter("all")
+                  setPaymentFilter("all")
+                  setDateRange("all")
+                  setCurrentPage(1)
+                }}
+                className="flex items-center gap-1 rounded-xl bg-gray-200/70 px-4 py-2 text-sm backdrop-blur-sm transition hover:bg-gray-300/70"
+              >
+                <X className="h-4 w-4" />
+                <span className="hidden sm:inline">Clear</span>
+              </button>
             </div>
           </div>
         </div>
+
+        {/* Orders Table */}
+        <div className="overflow-hidden rounded-2xl border border-white/50 bg-white/70 shadow-2xl backdrop-blur-xl">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="border-b border-gray-200/50 bg-gradient-to-r from-blue-50 to-indigo-50">
+                <tr>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700">Order</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700 hidden md:table-cell">Customer</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700 hidden lg:table-cell">Date</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700">Status</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700 hidden sm:table-cell">Payment</th>
+                  <th className="px-4 py-3 text-right font-semibold text-gray-700">Amount</th>
+                  <th className="px-4 py-3 text-center font-semibold text-gray-700">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedOrders.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-12 text-center text-gray-400">
+                      <ShoppingBag className="mx-auto mb-3 h-12 w-12 opacity-30" />
+                      <p className="text-base">No orders found</p>
+                    </td>
+                  </tr>
+                ) : (
+                  paginatedOrders.map((order) => (
+                    <tr
+                      key={order.id}
+                      className="border-b border-gray-100/60 transition hover:bg-white/30"
+                    >
+                      <td className="px-4 py-3">
+                        <div>
+                          <p className="font-mono text-xs font-medium text-gray-700">
+                            {order.orderNumber}
+                          </p>
+                          <p className="text-xs text-gray-500 md:hidden">{order.customerName}</p>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 hidden md:table-cell">
+                        <div>
+                          <p className="font-medium text-gray-800">{order.customerName}</p>
+                          <p className="text-xs text-gray-500">{order.customerEmail}</p>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 hidden lg:table-cell">
+                        <div>
+                          <p className="text-sm text-gray-700">
+                            {new Date(order.orderDate).toLocaleDateString("en-IN", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            {new Date(order.orderDate).toLocaleTimeString("en-IN", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </p>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <StatusBadge status={order.status} />
+                      </td>
+                      <td className="px-4 py-3 hidden sm:table-cell">
+                        <span
+                          className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${
+                            order.paymentStatus === "paid"
+                              ? "bg-green-100 text-green-700"
+                              : order.paymentStatus === "refunded"
+                              ? "bg-orange-100 text-orange-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                        >
+                          {order.paymentStatus === "paid" && <CheckCircle className="h-3 w-3" />}
+                          {order.paymentStatus === "refunded" && <ArrowDownRight className="h-3 w-3" />}
+                          {order.paymentStatus === "unpaid" && <XCircle className="h-3 w-3" />}
+                          {order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1)}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <p className="font-bold text-gray-800">৳{order.total.toLocaleString()}</p>
+                        <p className="text-xs text-gray-400">{order.items.length} items</p>
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <button
+                          onClick={() => handleViewOrder(order)}
+                          className=" cursor-pointer rounded-lg bg-blue-100/70 px-3 py-1.5 text-blue-700 transition hover:bg-blue-200/70 hover:text-blue-900"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          {filteredOrders.length > 0 && (
+            <div className="flex flex-col items-center gap-3 border-t border-gray-200/50 bg-white/30 px-4 py-3 backdrop-blur-sm sm:flex-row sm:justify-between">
+              <p className="text-sm text-gray-500">
+                Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                {Math.min(currentPage * itemsPerPage, filteredOrders.length)} of {filteredOrders.length} orders
+              </p>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="rounded-lg px-3 py-1 text-sm text-gray-600 transition hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-transparent"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`min-w-[32px] rounded-lg px-3 py-1 text-sm transition ${
+                      currentPage === page
+                        ? "bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-md"
+                        : "text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="rounded-lg px-3 py-1 text-sm text-gray-600 transition hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-transparent"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Order Detail Modal */}
+      {showDetailModal && selectedOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+          <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-white/50 bg-white/95 p-6 shadow-2xl backdrop-blur-xl md:p-8">
+            {/* Modal Header */}
+            <div className="mb-6 flex items-start justify-between border-b border-gray-200 pb-4">
+              <div>
+                <div className="flex items-center gap-3">
+                  <h2 className="text-xl font-bold text-gray-800 md:text-2xl">
+                    Order Details
+                  </h2>
+                  <StatusBadge status={selectedOrder.status} />
+                </div>
+                <p className="mt-1 font-mono text-sm text-gray-500">
+                  {selectedOrder.orderNumber}
+                </p>
+              </div>
+              <button
+                onClick={handleCloseModal}
+                className="rounded-full bg-gray-100 p-2 text-gray-500 transition hover:bg-gray-200 hover:text-gray-700"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Order Info Grid */}
+            <div className="grid gap-4 md:grid-cols-2">
+              {/* Customer Info */}
+              <div className="rounded-xl border border-gray-200 bg-white/50 p-4 backdrop-blur-sm">
+                <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <User className="h-4 w-4 text-blue-600" />
+                  Customer Information
+                </h3>
+                <div className="space-y-2">
+                  <p className="flex items-start gap-2 text-sm">
+                    <User className="mt-0.5 h-4 w-4 text-gray-400" />
+                    <span className="font-medium">{selectedOrder.customerName}</span>
+                  </p>
+                  <p className="flex items-start gap-2 text-sm">
+                    <Mail className="mt-0.5 h-4 w-4 text-gray-400" />
+                    <span>{selectedOrder.customerEmail}</span>
+                  </p>
+                  <p className="flex items-start gap-2 text-sm">
+                    <Phone className="mt-0.5 h-4 w-4 text-gray-400" />
+                    <span>{selectedOrder.customerPhone}</span>
+                  </p>
+                  <p className="flex items-start gap-2 text-sm">
+                    <MapPin className="mt-0.5 h-4 w-4 text-gray-400" />
+                    <span>{selectedOrder.customerAddress}</span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Order Info */}
+              <div className="rounded-xl border border-gray-200 bg-white/50 p-4 backdrop-blur-sm">
+                <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <Calendar className="h-4 w-4 text-blue-600" />
+                  Order Information
+                </h3>
+                <div className="space-y-2">
+                  <p className="flex items-start gap-2 text-sm">
+                    <Calendar className="mt-0.5 h-4 w-4 text-gray-400" />
+                    <span>
+                      Ordered:{" "}
+                      {new Date(selectedOrder.orderDate).toLocaleString("en-IN", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </p>
+                  {selectedOrder.shippedDate && (
+                    <p className="flex items-start gap-2 text-sm">
+                      <Truck className="mt-0.5 h-4 w-4 text-gray-400" />
+                      <span>
+                        Shipped:{" "}
+                        {new Date(selectedOrder.shippedDate).toLocaleString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </p>
+                  )}
+                  {selectedOrder.deliveredDate && (
+                    <p className="flex items-start gap-2 text-sm">
+                      <CheckCircle className="mt-0.5 h-4 w-4 text-gray-400" />
+                      <span>
+                        Delivered:{" "}
+                        {new Date(selectedOrder.deliveredDate).toLocaleString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </p>
+                  )}
+                  <p className="flex items-start gap-2 text-sm">
+                    <CreditCard className="mt-0.5 h-4 w-4 text-gray-400" />
+                    <span>
+                      Payment:{" "}
+                      <span
+                        className={`font-medium ${
+                          selectedOrder.paymentStatus === "paid"
+                            ? "text-green-600"
+                            : selectedOrder.paymentStatus === "refunded"
+                            ? "text-orange-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {selectedOrder.paymentStatus.charAt(0).toUpperCase() +
+                          selectedOrder.paymentStatus.slice(1)}
+                      </span>{" "}
+                      via {selectedOrder.paymentMethod.replace("_", " ")}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Order Items */}
+            <div className="mt-6 rounded-xl border border-gray-200 bg-white/50 p-4 backdrop-blur-sm">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
+                <Package className="h-4 w-4 text-blue-600" />
+                Order Items ({selectedOrder.items.length})
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="border-b border-gray-200">
+                    <tr>
+                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">#</th>
+                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Product</th>
+                      <th className="px-3 py-2 text-right text-xs font-medium text-gray-500">Qty</th>
+                      <th className="px-3 py-2 text-right text-xs font-medium text-gray-500">Price</th>
+                      <th className="px-3 py-2 text-right text-xs font-medium text-gray-500">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedOrder.items.map((item, index) => (
+                      <tr key={item.id} className="border-b border-gray-100 last:border-0">
+                        <td className="px-3 py-2 text-xs text-gray-500">{index + 1}</td>
+                        <td className="px-3 py-2 text-sm text-gray-800">{item.productName}</td>
+                        <td className="px-3 py-2 text-right text-sm text-gray-700">{item.quantity}</td>
+                        <td className="px-3 py-2 text-right text-sm text-gray-700">
+                          ৳{item.price.toLocaleString()}
+                        </td>
+                        <td className="px-3 py-2 text-right text-sm font-medium text-gray-800">
+                          ৳{item.total.toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot className="border-t-2 border-gray-200">
+                    <tr>
+                      <td colSpan={4} className="px-3 py-2 text-right text-sm font-medium text-gray-600">
+                        Subtotal
+                      </td>
+                      <td className="px-3 py-2 text-right text-sm text-gray-800">
+                        ৳{selectedOrder.subtotal.toLocaleString()}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan={4} className="px-3 py-2 text-right text-sm text-gray-600">
+                        Tax
+                      </td>
+                      <td className="px-3 py-2 text-right text-sm text-gray-800">
+                        ৳{selectedOrder.tax.toLocaleString()}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan={4} className="px-3 py-2 text-right text-sm text-gray-600">
+                        Shipping
+                      </td>
+                      <td className="px-3 py-2 text-right text-sm text-gray-800">
+                        ৳{selectedOrder.shipping.toLocaleString()}
+                      </td>
+                    </tr>
+                    {selectedOrder.discount > 0 && (
+                      <tr>
+                        <td colSpan={4} className="px-3 py-2 text-right text-sm text-green-600">
+                          Discount
+                        </td>
+                        <td className="px-3 py-2 text-right text-sm text-green-600">
+                          -৳{selectedOrder.discount.toLocaleString()}
+                        </td>
+                      </tr>
+                    )}
+                    <tr className="border-t-2 border-gray-300">
+                      <td colSpan={4} className="px-3 py-3 text-right text-base font-bold text-gray-800">
+                        Total
+                      </td>
+                      <td className="px-3 py-3 text-right text-base font-bold text-blue-600">
+                        ৳{selectedOrder.total.toLocaleString()}
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+            {/* Notes */}
+            {selectedOrder.notes && (
+              <div className="mt-4 rounded-xl border border-gray-200 bg-yellow-50/50 p-4 backdrop-blur-sm">
+                <p className="flex items-start gap-2 text-sm">
+                  <FileText className="mt-0.5 h-4 w-4 text-yellow-600" />
+                  <span className="text-gray-700">{selectedOrder.notes}</span>
+                </p>
+              </div>
+            )}
+
+            {/* Modal Actions */}
+            <div className="mt-6 flex flex-col gap-3 border-t border-gray-200 pt-4 sm:flex-row sm:justify-end sm:items-center">
+              <button
+                onClick={handleCloseModal}
+                className="flex items-center justify-center gap-2 rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-200"
+              >
+                Close
+              </button>
+              
+              {/* Accept Button - Show only for pending orders */}
+              {selectedOrder.status === "pending" && (
+                <button
+                  onClick={handleAcceptOrder}
+                  disabled={actionLoading}
+                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-700 px-4 py-2 text-sm font-medium text-white shadow-lg transition hover:scale-105 hover:shadow-xl disabled:opacity-50"
+                >
+                  {actionLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Check className="h-4 w-4" />
+                  )}
+                  Accept Order
+                </button>
+              )}
+              
+              {/* Reject Button - Show only for pending orders */}
+              {selectedOrder.status === "pending" && (
+                <button
+                  onClick={handleRejectOrder}
+                  disabled={actionLoading}
+                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-700 px-4 py-2 text-sm font-medium text-white shadow-lg transition hover:scale-105 hover:shadow-xl disabled:opacity-50"
+                >
+                  {actionLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <X className="h-4 w-4" />
+                  )}
+                  Reject Order
+                </button>
+              )}
+              
+              <button className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 px-4 py-2 text-sm font-medium text-white shadow-lg transition hover:scale-105 hover:shadow-xl">
+                <Printer className="h-4 w-4" />
+                Print Invoice
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-  );
+  )
 }

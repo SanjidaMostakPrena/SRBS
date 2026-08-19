@@ -265,7 +265,7 @@ export default function ReportsPage() {
           </div>
           <button
             onClick={handleExport}
-            className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-semibold flex items-center gap-1.5 sm:gap-2 shadow-lg hover:shadow-xl hover:scale-105 transition text-xs sm:text-sm md:text-base flex-shrink-0"
+            className=" cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-semibold flex items-center gap-1.5 sm:gap-2 shadow-lg hover:shadow-xl hover:scale-105 transition text-xs sm:text-sm md:text-base flex-shrink-0"
           >
             <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5" />
             <span className="hidden xs:inline">Export</span>
@@ -327,7 +327,7 @@ export default function ReportsPage() {
             <div className="flex flex-wrap gap-1.5 sm:gap-2 md:gap-3">
               <button
                 onClick={() => setActiveTab("sales")}
-                className={`px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-medium transition text-xs sm:text-sm md:text-base ${
+                className={`px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-medium transition text-xs cursor-pointer sm:text-sm md:text-base ${
                   activeTab === "sales"
                     ? "bg-blue-600 text-white shadow-lg"
                     : "bg-white/50 text-gray-600 hover:bg-white/70"
@@ -339,7 +339,7 @@ export default function ReportsPage() {
               </button>
               <button
                 onClick={() => setActiveTab("collection")}
-                className={`px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-medium transition text-xs sm:text-sm md:text-base ${
+                className={`px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-medium  cursor-pointer transition text-xs sm:text-sm md:text-base ${
                   activeTab === "collection"
                     ? "bg-green-600 text-white shadow-lg"
                     : "bg-white/50 text-gray-600 hover:bg-white/70"
@@ -351,7 +351,7 @@ export default function ReportsPage() {
               </button>
               <button
                 onClick={() => setActiveTab("due")}
-                className={`px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-medium transition text-xs sm:text-sm md:text-base ${
+                className={`px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl  cursor-pointer font-medium transition text-xs sm:text-sm md:text-base ${
                   activeTab === "due"
                     ? "bg-amber-600 text-white shadow-lg"
                     : "bg-white/50 text-gray-600 hover:bg-white/70"
@@ -363,7 +363,7 @@ export default function ReportsPage() {
               </button>
               <button
                 onClick={() => setActiveTab("stock")}
-                className={`px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-medium transition text-xs sm:text-sm md:text-base ${
+                className={`px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl  cursor-pointer font-medium transition text-xs sm:text-sm md:text-base ${
                   activeTab === "stock"
                     ? "bg-purple-600 text-white shadow-lg"
                     : "bg-white/50 text-gray-600 hover:bg-white/70"

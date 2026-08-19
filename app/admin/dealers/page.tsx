@@ -2,6 +2,7 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
+import Link from "next/link"
 import {
   Building2,
   Users,
@@ -18,6 +19,7 @@ import {
   User,
   Store,
   CheckCircle,
+  Lock,
 } from "lucide-react"
 
 // ============================================================
@@ -25,11 +27,11 @@ import {
 // ============================================================
 interface Dealer {
   id: string
-  dealerCode: string // NEW: human-readable display code
+  dealerCode: string
   name: string
   contactPerson: string
   phone: string
-  email: string
+  pin: string
   address: string
   area: string
   gstNumber?: string
@@ -46,7 +48,7 @@ const MOCK_DEALERS: Dealer[] = [
     name: "Mumbai Hardware Stores",
     contactPerson: "Rajesh Sharma",
     phone: "+91 98765 43210",
-    email: "info@mumbaihardware.com",
+    pin: "1234",
     address: "123, Linking Road, Bandra",
     area: "Mumbai Central",
     gstNumber: "GSTIN-27AABC1234D1Z1",
@@ -58,7 +60,7 @@ const MOCK_DEALERS: Dealer[] = [
     name: "Kolkata Building Materials",
     contactPerson: "Sneha Das",
     phone: "+91 87654 32109",
-    email: "sales@kolkatabm.com",
+    pin: "5678",
     address: "456, Park Street, Kolkata",
     area: "Kolkata South",
     gstNumber: "GSTIN-19AABC5678E1Z1",
@@ -70,7 +72,7 @@ const MOCK_DEALERS: Dealer[] = [
     name: "Delhi Construction Supplies",
     contactPerson: "Vikram Singh",
     phone: "+91 76543 21098",
-    email: "info@delhiconstruct.com",
+    pin: "9012",
     address: "789, Connaught Place, Delhi",
     area: "Delhi NCR",
     gstNumber: "GSTIN-07AABC9012F1Z1",
@@ -82,7 +84,7 @@ const MOCK_DEALERS: Dealer[] = [
     name: "Chennai Paint House",
     contactPerson: "Priya Rajan",
     phone: "+91 65432 10987",
-    email: "contact@chennaipaint.com",
+    pin: "3456",
     address: "101, Anna Nagar, Chennai",
     area: "Chennai East",
     gstNumber: "GSTIN-33AABC3456G1Z1",
@@ -94,7 +96,7 @@ const MOCK_DEALERS: Dealer[] = [
     name: "Bangalore Admixture Co",
     contactPerson: "Anand Kumar",
     phone: "+91 54321 09876",
-    email: "info@bangaloreadmixture.com",
+    pin: "7890",
     address: "202, MG Road, Bangalore",
     area: "Bangalore West",
     gstNumber: "GSTIN-29AABC7890H1Z1",
@@ -106,7 +108,7 @@ const MOCK_DEALERS: Dealer[] = [
     name: "Hyderabad Paint Traders",
     contactPerson: "Suresh Reddy",
     phone: "+91 43210 98765",
-    email: "sales@hydpaint.com",
+    pin: "2345",
     address: "303, Jubilee Hills, Hyderabad",
     area: "Hyderabad North",
     gstNumber: "GSTIN-36AABC2345I1Z1",
@@ -118,7 +120,7 @@ const MOCK_DEALERS: Dealer[] = [
     name: "Pune Construction Materials",
     contactPerson: "Meera Joshi",
     phone: "+91 32109 87654",
-    email: "info@punematerials.com",
+    pin: "6789",
     address: "404, FC Road, Pune",
     area: "Pune City",
     gstNumber: "GSTIN-27AABC6789J1Z1",
@@ -158,7 +160,7 @@ export default function DealersPage() {
     name: "",
     contactPerson: "",
     phone: "",
-    email: "",
+    pin: "",
     address: "",
     area: "",
     gstNumber: "",
@@ -181,6 +183,7 @@ export default function DealersPage() {
           d.name.toLowerCase().includes(q) ||
           d.contactPerson.toLowerCase().includes(q) ||
           d.phone.includes(q) ||
+          d.pin.includes(q) ||
           d.area.toLowerCase().includes(q) ||
           d.dealerCode.toLowerCase().includes(q)
       )
@@ -201,7 +204,7 @@ export default function DealersPage() {
       name: "",
       contactPerson: "",
       phone: "",
-      email: "",
+      pin: "",
       address: "",
       area: "",
       gstNumber: "",
@@ -218,7 +221,7 @@ export default function DealersPage() {
       name: dealer.name,
       contactPerson: dealer.contactPerson,
       phone: dealer.phone,
-      email: dealer.email,
+      pin: dealer.pin,
       address: dealer.address,
       area: dealer.area,
       gstNumber: dealer.gstNumber || "",
@@ -235,6 +238,8 @@ export default function DealersPage() {
 
   const handleModalSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Validation
     if (!formData.name.trim()) {
       setModalError("Dealer name is required")
       return
@@ -245,6 +250,14 @@ export default function DealersPage() {
     }
     if (!formData.phone.trim()) {
       setModalError("Phone number is required")
+      return
+    }
+    if (!formData.pin.trim()) {
+      setModalError("PIN is required")
+      return
+    }
+    if (formData.pin.length < 4 || formData.pin.length > 6) {
+      setModalError("PIN must be between 4 and 6 characters")
       return
     }
     if (!formData.area.trim()) {
@@ -265,32 +278,36 @@ export default function DealersPage() {
 
     if (editingDealer) {
       // Update existing
+      const updatedData: Partial<Dealer> = {
+        dealerCode: finalDealerCode,
+        name: formData.name,
+        contactPerson: formData.contactPerson,
+        phone: formData.phone,
+        pin: formData.pin,
+        address: formData.address,
+        area: formData.area,
+        gstNumber: formData.gstNumber,
+      }
+
       setDealers((prev) =>
         prev.map((d) =>
           d.id === editingDealer.id
             ? {
                 ...d,
-                dealerCode: finalDealerCode,
-                name: formData.name,
-                contactPerson: formData.contactPerson,
-                phone: formData.phone,
-                email: formData.email,
-                address: formData.address,
-                area: formData.area,
-                gstNumber: formData.gstNumber,
+                ...updatedData,
               }
             : d
         )
       )
     } else {
-      // Add new - FIXED: Don't spread formData to avoid duplicate dealerCode
+      // Add new
       const newDealer: Dealer = {
         id: `d${Date.now()}`,
         dealerCode: finalDealerCode,
         name: formData.name,
         contactPerson: formData.contactPerson,
         phone: formData.phone,
-        email: formData.email,
+        pin: formData.pin,
         address: formData.address,
         area: formData.area,
         gstNumber: formData.gstNumber,
@@ -362,30 +379,28 @@ export default function DealersPage() {
       <div className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 sm:h-80 sm:w-80 md:h-80 md:w-80 -translate-x-1/2 translate-y-1/2 rounded-full bg-gradient-to-tr from-purple-200/20 to-pink-200/20 blur-3xl" />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        {/* Header */}
-        <div className="mb-4 sm:mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-white/40 bg-white/30 p-4 sm:p-5 md:p-6 shadow-xl backdrop-blur-xl">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-2.5 sm:p-3 text-white shadow-lg flex-shrink-0">
-              <Store className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />
+        
+ <div className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-white/40 bg-white/30 p-3 sm:p-4 md:p-5 lg:p-6 shadow-xl backdrop-blur-xl">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+            <div className="rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-2 sm:p-2.5 md:p-3 text-white shadow-lg flex-shrink-0">
+              <User className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 lg:h-8 lg:w-8" />
             </div>
-            <div>
-              <h1 className="text-xl sm:text-2xl md:text-3xl bg-gradient-to-r from-blue-700 to-indigo-800 bg-clip-text font-bold text-transparent">
+            <div className="min-w-0">
+              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-700 to-indigo-800 bg-clip-text text-transparent truncate">
                 Dealer Management
               </h1>
-              <p className="text-xs sm:text-sm text-gray-600">
-                Manage all dealers and distributors
-              </p>
+              <p className="text-xs sm:text-sm text-gray-600 hidden sm:block truncate">Manage all dealers and distributors</p>
             </div>
           </div>
           <button
             onClick={handleAddNew}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 px-4 sm:px-5 py-2 text-sm sm:text-base font-semibold text-white shadow-lg transition hover:scale-105 hover:shadow-xl"
+            className=" cursor-pointer flex items-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 text-xs sm:text-sm md:text-base font-semibold text-white shadow-lg transition hover:scale-105 hover:shadow-xl flex-shrink-0"
           >
-            <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
-            Add Dealer
+            <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+            <span className="hidden xs:inline">Add Dealer</span>
+            <span className="xs:hidden">Add Dealer</span>
           </button>
         </div>
-
         {/* Filters */}
         <div className="mb-4 sm:mb-6 rounded-2xl sm:rounded-3xl border border-white/50 bg-white/70 p-4 sm:p-5 md:p-6 shadow-2xl backdrop-blur-xl">
           <div className="flex flex-col gap-3 sm:gap-4 md:flex-row md:items-center">
@@ -393,7 +408,7 @@ export default function DealersPage() {
               <Search className="absolute top-1/2 left-3 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search by dealer name, contact person, phone, code or area..."
+                placeholder="Search by dealer name, contact person, phone, PIN, code or area..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full rounded-xl border-2 border-gray-200 bg-white/50 py-1.5 sm:py-2 pr-3 sm:pr-4 pl-9 sm:pl-10 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
@@ -467,21 +482,32 @@ export default function DealersPage() {
                       className="border-b border-gray-100/60 transition hover:bg-white/30"
                     >
                       <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-gray-500">{index + 1}</td>
+                      
+                      {/* Dealer Code - Clickable */}
                       <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
-                        <span className="font-mono text-[10px] sm:text-xs md:text-sm font-medium text-gray-700">
+                        <Link 
+                          href={`/admin/dealers/${dealer.id}`}
+                          className="font-mono text-[10px] sm:text-xs md:text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline cursor-pointer transition"
+                        >
                           {dealer.dealerCode}
-                        </span>
+                        </Link>
                       </td>
+                      
+                      {/* Dealer Info - Name Clickable */}
                       <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
                         <div>
-                          <p className="font-medium text-gray-800 text-xs sm:text-sm">
+                          <Link 
+                            href={`/admin/dealers/${dealer.id}`}
+                            className="font-medium text-gray-800 text-xs sm:text-sm hover:text-blue-600 hover:underline cursor-pointer transition block"
+                          >
                             {dealer.name}
-                          </p>
+                          </Link>
                           <p className="text-[10px] sm:text-xs text-gray-500 truncate max-w-[120px] sm:max-w-[200px]">
                             {dealer.address}
                           </p>
                         </div>
                       </td>
+                      
                       <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 hidden sm:table-cell">
                         <div>
                           <p className="text-xs sm:text-sm text-gray-700">
@@ -490,6 +516,10 @@ export default function DealersPage() {
                           <p className="flex items-center gap-1 text-[10px] sm:text-xs text-gray-500">
                             <Phone className="h-2 w-2 sm:h-3 sm:w-3" />
                             {dealer.phone}
+                          </p>
+                          <p className="flex items-center gap-1 text-[10px] sm:text-xs text-gray-500">
+                            <Lock className="h-2 w-2 sm:h-3 sm:w-3" />
+                            PIN: {dealer.pin}
                           </p>
                         </div>
                       </td>
@@ -501,16 +531,16 @@ export default function DealersPage() {
                       </td>
                       <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-center">
                         <div className="flex items-center justify-center gap-1 sm:gap-2">
-                          <button
-                            onClick={() => handleEdit(dealer)}
-                            className="rounded-full p-1 text-blue-600 transition hover:bg-blue-100/50 hover:text-blue-800"
-                            title="Edit"
-                          >
-                            <Edit className="h-4 w-4 sm:h-5 sm:w-5" />
-                          </button>
+                       <button
+  onClick={() => handleEdit(dealer)}
+  className="rounded-full p-1 text-blue-600 transition hover:bg-blue-100/50 hover:text-blue-800 cursor-pointer"
+  title="Edit"
+>
+  <Edit className="h-4 w-4 sm:h-5 sm:w-5" />
+</button>
                           <button
                             onClick={() => handleDelete(dealer)}
-                            className="rounded-full p-1 text-red-500 transition hover:bg-red-100/50 hover:text-red-700"
+                            className="rounded-full p-1 text-red-500 transition hover:bg-red-100/50 hover:text-red-700 cursor-pointer"
                             title="Delete"
                           >
                             <Trash2 className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -529,7 +559,7 @@ export default function DealersPage() {
         </div>
       </div>
 
-      {/* Add/Edit Modal */}
+      {/* Add/Edit Modal - Proper Field Order */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4 backdrop-blur-sm">
           <div className="animate-fadeIn max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl sm:rounded-3xl border border-white/50 bg-white/95 p-4 sm:p-5 md:p-6 shadow-2xl backdrop-blur-xl mx-2 sm:mx-4">
@@ -540,17 +570,18 @@ export default function DealersPage() {
               </h2>
               <button
                 onClick={handleCloseModal}
-                className="text-gray-400 transition hover:text-gray-600"
+                className=" text-gray-400 transition hover:text-gray-600"
               >
                 <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
             </div>
 
             <form onSubmit={handleModalSubmit} className="space-y-3 sm:space-y-4">
+              {/* Row 1: Dealer Code + Dealer Name */}
               <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
                 <div>
                   <label className="mb-1 block text-xs sm:text-sm font-medium text-gray-700">
-                    Dealer Code 
+                    Dealer Code
                   </label>
                   <input
                     type="text"
@@ -558,7 +589,7 @@ export default function DealersPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, dealerCode: e.target.value })
                     }
-                    placeholder="e.g., D001 (auto‑generated if blank)"
+                    placeholder="e.g., D001 (auto-generated if blank)"
                     className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
                   />
                 </div>
@@ -579,38 +610,51 @@ export default function DealersPage() {
                 </div>
               </div>
 
+
+              {/* Row 3: Phone + PIN */}
               <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
                 <div>
                   <label className="mb-1 block text-xs sm:text-sm font-medium text-gray-700">
-                    Phone
+                    Phone Number
                   </label>
-                  <input
-                    type="text"
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    placeholder="+91 98765 43210"
-                    className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
-                    required
-                  />
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="text"
+                      value={formData.phone}
+                      onChange={(e) =>
+                        setFormData({ ...formData, phone: e.target.value })
+                      }
+                      placeholder="+91 98765 43210"
+                      className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-3 sm:px-4 py-1.5 sm:py-2 pl-9 sm:pl-10 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+                      required
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="mb-1 block text-xs sm:text-sm font-medium text-gray-700">
-                    Email
+                    PIN
                   </label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    placeholder="info@company.com"
-                    className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
-                  />
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="password"
+                      value={formData.pin}
+                      onChange={(e) =>
+                        setFormData({ ...formData, pin: e.target.value })
+                      }
+                      placeholder="Enter PIN (4-6 digits)"
+                      className="w-full rounded-xl border-2 border-gray-200 bg-white/50 px-3 sm:px-4 py-1.5 sm:py-2 pl-9 sm:pl-10 text-sm sm:text-base backdrop-blur-sm transition-all outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
+                      required
+                      minLength={4}
+                      maxLength={6}
+                    />
+                  </div>
+                  <p className="mt-1 text-[10px] sm:text-xs text-gray-500">4-6 characters</p>
                 </div>
               </div>
 
+              {/* Row 4: Address */}
               <div>
                 <label className="mb-1 block text-xs sm:text-sm font-medium text-gray-700">
                   Address
@@ -626,6 +670,7 @@ export default function DealersPage() {
                 />
               </div>
 
+              {/* Row 5: Area + GST Number */}
               <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
                 <div>
                   <label className="mb-1 block text-xs sm:text-sm font-medium text-gray-700">
@@ -647,7 +692,7 @@ export default function DealersPage() {
                     ))}
                   </select>
                 </div>
-              
+               
               </div>
 
               {modalError && (
@@ -749,6 +794,12 @@ export default function DealersPage() {
         }
         .animate-fadeIn {
           animation: fadeIn 0.2s ease-out;
+        }
+        @media (min-width: 480px) {
+          .xs\\:inline { display: inline; }
+        }
+        @media (max-width: 479px) {
+          .xs\\:inline { display: none; }
         }
       `}</style>
     </div>

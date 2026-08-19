@@ -322,7 +322,7 @@ export default function ProductsPage() {
           </div>
           <button
             onClick={handleAddNew}
-            className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-semibold flex items-center gap-1.5 sm:gap-2 shadow-lg hover:shadow-xl hover:scale-105 transition text-sm sm:text-base flex-shrink-0"
+            className=" cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-semibold flex items-center gap-1.5 sm:gap-2 shadow-lg hover:shadow-xl hover:scale-105 transition text-sm sm:text-base flex-shrink-0"
           >
             <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
             <span className="hidden xs:inline">Add Product</span>
@@ -408,14 +408,14 @@ export default function ProductsPage() {
                         <div className="flex items-center justify-center gap-1 sm:gap-2">
                           <button
                             onClick={() => handleEdit(product)}
-                            className="text-blue-600 hover:text-blue-800 p-1 rounded-full hover:bg-blue-100/50 transition"
+                            className="cursor-pointer text-blue-600 hover:text-blue-800 p-1 rounded-full hover:bg-blue-100/50 transition"
                             title="Edit"
                           >
                             <Edit className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5" />
                           </button>
                           <button
                             onClick={() => handleDelete(product)}
-                            className="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-100/50 transition"
+                            className=" cursor-pointer text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-100/50 transition"
                             title="Delete"
                           >
                             <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5" />

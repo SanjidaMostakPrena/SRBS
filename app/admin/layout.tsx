@@ -81,12 +81,15 @@ export default function AdminLayout({
     // Management Sections
     { icon: Store, label: "Seller Management", href: "/admin/sellers" },
     { icon: UserCog, label: "Dealer Management", href: "/admin/dealers" },
-    { icon: Users, label: "Area Management", href: "/admin/area" },
-    { icon: ShoppingCart, label: "Order Management", href: "/admin/orders" },
+    { icon: Package, label: "TSM", href: "/admin/tsm" },
+     { icon: Package, label: "Area Manager", href: "/admin/areamanager" },
+       { icon: Users, label: "Area Management", href: "/admin/area" },
+    { icon: ShoppingCart, label: " Seller Order Management", href: "/admin/orders" },
+    { icon: ShoppingCart, label: " Dealer Order Management", href: "/admin/dealerorder" },
     { icon: Package, label: "Product Management", href: "/admin/products" },
     { icon: Tag, label: "Category Management", href: "/admin/categories" },
     { icon: Boxes, label: "Stock", href: "/admin/stock" },
-    { icon: HandCoins, label: "Payment Management", href: "/admin/payments" },
+    
 
     // Reports & Settings
     { icon: FileText, label: "Reports (Daily/Monthly/Yearly)", href: "/admin/reports" },
